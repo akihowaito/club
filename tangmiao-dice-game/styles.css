@@ -274,7 +274,9 @@ input:disabled { background: #f9f6f8; color: #b4a8b2; }
 .image-dialog-body { padding: 14px; overflow: auto; max-height: 72vh; }
 .image-dialog-body img { width: 100%; height: auto; display: block; border-radius: 16px; }
 .receipt-preview-wrap { padding: 14px; overflow: auto; max-height: 67vh; background: #fff8fb; }
-#receiptPreview { display: block; width: min(100%, 540px); height: auto; margin: 0 auto; border-radius: 18px; box-shadow: 0 14px 34px rgba(90,57,82,.14); background: #fff; }
+#receiptImage { display: block; width: min(100%, 540px); height: auto; margin: 0 auto; border-radius: 18px; box-shadow: 0 14px 34px rgba(90,57,82,.14); background: #fff; -webkit-touch-callout: default; user-select: auto; }
+.receipt-canvas-source { display: none; }
+.receipt-save-hint { margin: 12px 14px 0; padding: 11px 12px; border: 1px solid #f1cedd; border-radius: 14px; background: #fff4f8; color: #9f5876; font-size: 12px; font-weight: 700; line-height: 1.6; }
 .dialog-actions { display: flex; justify-content: flex-end; padding: 0 14px 14px; }
 
 .interactive { transition: transform .18s ease, filter .18s ease, box-shadow .18s ease, background .18s ease; }
@@ -432,4 +434,12 @@ input:disabled { background: #f9f6f8; color: #b4a8b2; }
   .notice-card { grid-template-columns: 112px minmax(0, 1fr); min-height: 100px; }
   .notice-image-button { height: 100px; }
   .hero-title h2 { font-size: 21px; }
+}
+
+/* V8 · sound + WeChat receipt fallback */
+.sound-ready-pulse { animation: soundReadyPulse .42s ease; }
+@keyframes soundReadyPulse { 0% { transform: scale(1); } 45% { transform: scale(1.018); } 100% { transform: scale(1); } }
+@media (max-width: 640px) {
+  .receipt-save-hint { margin: 9px 9px 0; padding: 10px 11px; font-size: 11px; border-radius: 12px; }
+  #receiptImage { border-radius: 13px; }
 }

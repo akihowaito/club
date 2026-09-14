@@ -131,6 +131,8 @@
   const receiptDialog = document.getElementById("receiptDialog");
   const closeReceipt = document.getElementById("closeReceipt");
   const receiptCanvas = document.getElementById("receiptPreview");
+  const receiptImage = document.getElementById("receiptImage");
+  const receiptSaveHint = document.getElementById("receiptSaveHint");
   const historyList = document.getElementById("historyList");
   const historyCount = document.getElementById("historyCount");
   const emptyHistory = document.getElementById("emptyHistory");
@@ -138,7 +140,9 @@
   const ctx = canvas.getContext("2d");
   const gameCard = document.getElementById("gameCard");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isWeChatBrowser = /MicroMessenger/i.test(navigator.userAgent || "");
 
+  let audioContext = null;
   let activeCode = null;
   let currentResult = null;
   let currentReceiptRecord = null;
@@ -360,28 +364,74 @@
     if (particles.length) animationFrame = requestAnimationFrame(renderParticles);
   }
 
-  function playRollTone() {
+  function ensureAudioContext() {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ac = new AudioCtx();
-      const gain = ac.createGain();
-      gain.gain.setValueAtTime(.0001, ac.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.08, ac.currentTime + .02);
-      gain.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + .36);
-      gain.connect(ac.destination);
-      [0, .09, .18].forEach((offset, idx) => {
-        const osc = ac.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = 280 + idx * 120;
-        osc.connect(gain);
-        osc.start(ac.currentTime + offset);
-        osc.stop(ac.currentTime + offset + .12);
-      });
-      setTimeout(() => ac.close().catch(() => {}), 700);
+      if (!AudioCtx) return null;
+      if (!audioContext) audioContext = new AudioCtx();
+      if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+      return audioContext;
     } catch {
-      // Optional sound only.
+      return null;
     }
+  }
+
+  function scheduleTone(ac, frequency, startOffset = 0, duration = .08, volume = .028, type = "sine", endFrequency = null) {
+    if (!ac) return;
+    const now = ac.currentTime + startOffset;
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency, now);
+    if (endFrequency) osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFrequency), now + duration);
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(.001, volume), now + .008);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.start(now);
+    osc.stop(now + duration + .02);
+  }
+
+  function playButtonSound() {
+    const ac = ensureAudioContext();
+    if (!ac) return;
+    scheduleTone(ac, 660, 0, .045, .018, "sine", 760);
+    scheduleTone(ac, 980, .035, .035, .012, "sine", 1080);
+  }
+
+  function playSuccessSound() {
+    const ac = ensureAudioContext();
+    if (!ac) return;
+    [659, 784, 988].forEach((freq, i) => scheduleTone(ac, freq, i * .07, .13, .024, "sine"));
+  }
+
+  function playErrorSound() {
+    const ac = ensureAudioContext();
+    if (!ac) return;
+    scheduleTone(ac, 260, 0, .09, .022, "triangle", 190);
+    scheduleTone(ac, 190, .09, .11, .018, "triangle", 150);
+  }
+
+  function playRollTone() {
+    const ac = ensureAudioContext();
+    if (!ac) return;
+    const clacks = [0, .07, .15, .24, .34, .45, .57, .70, .84, .99, 1.15];
+    clacks.forEach((offset, i) => {
+      const base = 220 + ((i * 53) % 130);
+      const vol = Math.max(.012, .035 - i * .0017);
+      scheduleTone(ac, base, offset, .055, vol, "triangle", 95 + (i % 3) * 18);
+      scheduleTone(ac, base * 1.9, offset + .006, .032, vol * .45, "square", base * 1.2);
+    });
+  }
+
+  function playResultSound(result) {
+    const ac = ensureAudioContext();
+    if (!ac) return;
+    const root = 523.25 + (Math.max(1, Math.min(6, Number(result))) - 1) * 18;
+    [root, root * 1.25, root * 1.5, root * 2].forEach((freq, i) => {
+      scheduleTone(ac, freq, i * .065, .20 - i * .015, .025 - i * .002, "sine");
+    });
   }
 
   function drawRoundedRect(c, x, y, w, h, r, fill, stroke) {
@@ -485,29 +535,40 @@
     c.textAlign = "left";
   }
 
+  function receiptDataURL(record, targetCanvas = null) {
+    const canvasTarget = targetCanvas || document.createElement("canvas");
+    canvasTarget.width = 1080;
+    canvasTarget.height = 1440;
+    drawReceipt(record, canvasTarget);
+    return canvasTarget.toDataURL("image/png");
+  }
+
   function receiptFilename(record) {
     const cleanTime = (record.timeText || formatDateTime(record.rolledAt)).replace(/[ :]/g, "-");
     return `糖喵电竞-骰子结果-${record.result}点-${cleanTime}.png`;
   }
 
   function downloadReceipt(record) {
-    const temp = document.createElement("canvas");
-    temp.width = 1080; temp.height = 1440;
-    drawReceipt(record, temp);
     const link = document.createElement("a");
     link.download = receiptFilename(record);
-    link.href = temp.toDataURL("image/png");
+    link.href = receiptDataURL(record);
     document.body.appendChild(link);
     link.click();
     link.remove();
   }
 
-  function autoDownloadReceipt(record) {
+  function handleReceiptAfterRoll(record) {
+    if (isWeChatBrowser) {
+      openReceipt(record, true);
+      setMessage("票据已生成。微信内请长按票据图片保存到手机。", "success");
+      return;
+    }
     try {
       downloadReceipt(record);
-      setMessage("结果截图已自动下载，可在历史记录再次查看。", "success");
+      setMessage("结果票据已自动下载，可在历史记录再次查看。", "success");
     } catch {
-      setMessage("自动下载被浏览器阻止，可在历史记录中查看截图。", "success");
+      openReceipt(record, false);
+      setMessage("自动下载被浏览器阻止，已为你打开票据预览。", "success");
     }
   }
 
@@ -537,10 +598,12 @@
     return getHistory().find(item => item.id === id) || null;
   }
 
-  function openReceipt(record) {
+  function openReceipt(record, fromWeChatFlow = isWeChatBrowser) {
     if (!record) return;
     currentReceiptRecord = record;
-    drawReceipt(record, receiptCanvas);
+    const dataURL = receiptDataURL(record, receiptCanvas);
+    receiptImage.src = dataURL;
+    receiptSaveHint.hidden = !fromWeChatFlow;
     if (typeof receiptDialog.showModal === "function") receiptDialog.showModal();
     else receiptDialog.setAttribute("open", "");
   }
@@ -599,13 +662,14 @@
       addHistory(record);
       resultCopy.innerHTML = `本次结果：<strong>${result} 点</strong>`;
       burstParticles();
+      playResultSound(result);
       isRolling = false;
 
       setStatus("已完成", "done");
       rollLabel.textContent = "本次机会已使用";
       rollButton.disabled = true;
 
-      window.setTimeout(() => autoDownloadReceipt(record), prefersReducedMotion ? 20 : 260);
+      window.setTimeout(() => handleReceiptAfterRoll(record), prefersReducedMotion ? 20 : 260);
     };
   }
 
@@ -614,24 +678,34 @@
     if (input.disabled) return;
     const code = normalizeCode(input.value);
     if (!code) {
+      playErrorSound();
       setMessage("请输入兑换口令。", "error"); input.focus(); return;
     }
     if (!VALID_CODES.has(code)) {
+      playErrorSound();
       setMessage("口令无效，请检查后重新输入。", "error"); input.select(); return;
     }
 
     const existing = readState(code);
     if (existing) {
-      if (existing.rolled && existing.result) showFinished(code, existing.result);
-      else showReady(code);
+      if (existing.rolled && existing.result) {
+        showFinished(code, existing.result);
+      } else {
+        showReady(code);
+        playSuccessSound();
+      }
       return;
     }
 
     const ok = saveState(code, { redeemedAt: new Date().toISOString(), rolled: false, result: null });
     if (!ok) {
+      playErrorSound();
       setMessage("无法记录兑换状态，请刷新页面后重试。", "error"); return;
     }
     showReady(code);
+    playSuccessSound();
+    gameCard.classList.remove("sound-ready-pulse");
+    requestAnimationFrame(() => gameCard.classList.add("sound-ready-pulse"));
   });
 
   rollButton.addEventListener("click", rollDice);
@@ -655,6 +729,17 @@
   receiptDialog.addEventListener("click", event => { if (event.target === receiptDialog) receiptDialog.close(); });
 
   window.addEventListener("resize", resizeCanvas, { passive: true });
+
+  document.addEventListener("pointerdown", event => {
+    const button = event.target.closest("button:not(:disabled)");
+    if (!button || button.id === "rollButton") return;
+    playButtonSound();
+  }, true);
+
+  if (isWeChatBrowser) {
+    const miniNoteText = document.querySelector("#miniNote span");
+    if (miniNoteText) miniNoteText.textContent = "微信内打开：掷骰后会直接弹出票据，请长按图片保存；如需自动下载，请在右上角选择浏览器打开。";
+  }
 
   renderHistory();
   resizeCanvas();

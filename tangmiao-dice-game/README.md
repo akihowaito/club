@@ -28,3 +28,10 @@
 - `app.js`：兑换、骰子、历史记录与截图逻辑
 - `assets/`：品牌与须知图片
 - `兑换口令-100个.txt`：最终 100 个正式兑换口令
+
+## V8 interaction updates
+- All enabled buttons have a short UI click sound generated with the Web Audio API; no external audio files are required.
+- Dice rolling uses a layered rattle sound, and the final result has a short result chime.
+- WeChat in-app browser is detected with the `MicroMessenger` user agent.
+- In WeChat, the page does not attempt a forced file download. It opens the generated receipt as a real `<img>` so the user can long-press to save it. The receipt dialog also explains how to open the page in the system browser for normal automatic downloading.
+- In normal browsers, the existing automatic PNG download remains enabled.
