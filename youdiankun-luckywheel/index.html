@@ -253,6 +253,7 @@ body{
 .receipt-preview-scroll{max-height:min(72vh,760px);overflow:auto;border-radius:20px;background:#f7f8fd;border:1px solid var(--line);padding:10px}
 .receipt-preview-scroll img{display:block;width:100%;height:auto;border-radius:14px}
 .receipt-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.receipt-save-tip{margin:10px 2px 0;color:#817b91;font-size:12px;line-height:1.65;text-align:left}
 @media(max-width:900px){.records-prizes-row{grid-template-columns:1fr}.history-card{padding:22px}.prizes{padding:22px}}
 @media (hover:hover){.wheel-card:hover,.side-card:hover{transform:translateY(-2px);box-shadow:0 22px 70px rgba(90,103,150,.18)}}
 @media(max-width:560px){.status-combo{gap:10px}.credit-number b{font-size:39px}.float-star{opacity:.18}.wheel-particles{inset:-24px}.receipt-preview-actions{grid-template-columns:1fr}.history-item{grid-template-columns:1fr auto}}
@@ -375,7 +376,7 @@ body{
 </div>
 <div id="toast" class="toast"></div>
 <div id="winModal" class="modal"><div class="modal-card"><button class="close" id="closeModal">×</button><div class="win-mark">✦</div><div class="section-kicker">Congratulations</div><h2>恭喜抽中</h2><div id="modalPrize" class="big-prize">—</div><p id="modalInfo">请保存中奖凭证并联系客服兑奖。</p><div class="modal-actions"><button class="btn" id="againBtn">关闭</button><button class="btn primary" id="saveBtn">保存中奖凭证</button></div></div></div>
-<div id="receiptModal" class="modal"><div class="modal-card receipt-preview-card"><button class="close" id="closeReceiptModal">×</button><div class="section-kicker">Prize Screenshot</div><h2>中奖截图</h2><div class="receipt-preview-scroll"><img id="receiptPreviewImg" alt="中奖凭证截图"></div><div class="receipt-preview-actions"><button class="btn" id="closeReceiptBtn">关闭</button><button class="btn primary" id="downloadReceiptBtn">重新下载截图</button></div></div></div>
+<div id="receiptModal" class="modal"><div class="modal-card receipt-preview-card"><button class="close" id="closeReceiptModal">×</button><div class="section-kicker">Prize Screenshot</div><h2>中奖截图</h2><div class="receipt-preview-scroll"><img id="receiptPreviewImg" alt="中奖凭证截图"></div><p id="receiptSaveTip" class="receipt-save-tip" hidden></p><div class="receipt-preview-actions"><button class="btn" id="closeReceiptBtn">关闭</button><button class="btn primary" id="downloadReceiptBtn">重新下载截图</button></div></div></div>
 
 <script>
 const prizes = [
@@ -406,6 +407,10 @@ const wheelStage = document.querySelector('.wheel-stage');
 const wheelParticles = document.getElementById('wheelParticles');
 const receiptModal = document.getElementById('receiptModal');
 const receiptPreviewImg = document.getElementById('receiptPreviewImg');
+const receiptSaveTip = document.getElementById('receiptSaveTip');
+const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+const saveBtn = document.getElementById('saveBtn');
+const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
 let previewWin = null;
 const fxCanvas = document.getElementById('fxCanvas');
 const fx = fxCanvas.getContext('2d');
@@ -498,6 +503,8 @@ function tone(freq=660,duration=.07,type='sine',gain=.045,delay=0){
   o.connect(g);g.connect(c.destination);o.start(c.currentTime+delay);o.stop(c.currentTime+delay+duration+.02);
 }
 function playUnlockSound(){tone(620,.08,'sine',.035,0);tone(840,.11,'sine',.04,.075)}
+function playButtonSound(){tone(720,.045,'sine',.018,0)}
+function playErrorSound(){tone(220,.10,'triangle',.04,0);tone(164,.13,'triangle',.035,.09)}
 function playTickSound(){tone(1180,.028,'square',.012,0)}
 function playWinSound(){tone(523.25,.18,'sine',.045,0);tone(659.25,.20,'sine',.045,.10);tone(783.99,.24,'sine',.05,.20);tone(1046.5,.34,'triangle',.04,.32)}
 function runSpinTicks(){
@@ -603,17 +610,21 @@ function renderHistory(){
   })
 }
 renderHistory(); updateCredits();
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button');
+  if(button&&!button.disabled)playButtonSound();
+},true);
 
 unlockBtn.addEventListener('click',async()=>{
   ensureAudio();
   const code=codeInput.value.trim().toUpperCase();
-  if(code.length<8) return showToast('请输入有效的活动兑换码');
+  if(code.length<8){playErrorSound();return showToast('请输入有效的活动兑换码')}
   unlockBtn.disabled=true;unlockBtn.textContent='核验中…';
   try{
     const hash=await sha256(code);
-    if(!VALID_CODE_HASHES.has(hash)) return showToast('兑换码无效，请检查后重新输入');
+    if(!VALID_CODE_HASHES.has(hash)){playErrorSound();return showToast('兑换码无效，请检查后重新输入')}
     const used=getUsedCodes();
-    if(used.includes(hash)) return showToast('这个兑换码已在本设备使用过');
+    if(used.includes(hash)){playErrorSound();return showToast('这个兑换码已在本设备使用过')}
     used.push(hash); setUsedCodes(used);
     const queue=getCodeQueue();queue.push({hash,code});setCodeQueue(queue);
     activeCode=code; credits+=1; updateCredits();
@@ -668,20 +679,21 @@ async function finishSpin(idx){
   latestWin={prize:p.name,time,code,region:meta.region,device:meta.device,fingerprint:meta.fingerprint};
   const hist=getHistory(); hist.unshift(latestWin); saveHistory(hist); renderHistory();
   resultBox.classList.add('win');
-  resultBox.innerHTML=`<span class="status-label">本次抽奖结果</span><div class="result-icon">WIN</div><h3>${p.name}</h3><p>开奖时间：${time}<br>剩余 ${credits} 次 · 票据截图已自动下载保存。</p>`;
-  modalPrize.textContent=p.name; modalInfo.textContent=`开奖时间：${time} · 剩余 ${credits} 次 · 中奖票据已自动下载保存。`; modal.classList.add('show');
-  setTimeout(()=>{downloadReceipt(latestWin,true);startIdleSpin()},260);
+  const receiptNotice=isWeChat?'微信内已弹出票据，请长按图片保存。':'中奖票据已自动下载保存。';
+  resultBox.innerHTML=`<span class="status-label">本次抽奖结果</span><div class="result-icon">WIN</div><h3>${p.name}</h3><p>开奖时间：${time}<br>剩余 ${credits} 次 · ${receiptNotice}</p>`;
+  modalPrize.textContent=p.name; modalInfo.textContent=`开奖时间：${time} · 剩余 ${credits} 次 · ${receiptNotice}`; saveBtn.textContent=isWeChat?'查看中奖票据':'保存中奖凭证'; modal.classList.add('show');
+  setTimeout(()=>{saveReceipt(latestWin,true);startIdleSpin()},260);
 }
 
 document.getElementById('closeModal').onclick=()=>modal.classList.remove('show');
 document.getElementById('againBtn').onclick=()=>modal.classList.remove('show');
 modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
 
-document.getElementById('saveBtn').addEventListener('click',()=>{if(latestWin)downloadReceipt(latestWin,false)});
+saveBtn.addEventListener('click',()=>{if(latestWin)saveReceipt(latestWin,false)});
 document.getElementById('closeReceiptModal').onclick=()=>receiptModal.classList.remove('show');
 document.getElementById('closeReceiptBtn').onclick=()=>receiptModal.classList.remove('show');
 receiptModal.addEventListener('click',e=>{if(e.target===receiptModal)receiptModal.classList.remove('show')});
-document.getElementById('downloadReceiptBtn').addEventListener('click',()=>{if(previewWin)downloadReceipt(previewWin,false)});
+downloadReceiptBtn.addEventListener('click',()=>{if(previewWin)saveReceipt(previewWin,false)});
 function roundRect(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill)ctx.fill();if(stroke)ctx.stroke()}
 function drawCentered(ctx,text,y,size,weight='700',color='#2d2940'){ctx.fillStyle=color;ctx.font=`${weight} ${size}px "Microsoft YaHei",Arial`;ctx.textAlign='center';ctx.fillText(text,450,y)}
 function fitText(ctx,text,maxWidth,startSize=22,minSize=15,weight='700'){
@@ -767,9 +779,20 @@ function downloadReceipt(win,silent=false){
     showToast(silent?'中奖截图已自动下载保存':'中奖截图已下载保存');
   });
 }
+function saveReceipt(win,silent=false){
+  if(isWeChat){
+    showReceiptPreview(win,true);
+    if(!silent)showToast('微信内请长按票据图片保存；浏览器打开可自动下载');
+    return;
+  }
+  downloadReceipt(win,silent);
+}
 function showReceiptPreview(win,autoOpen=false){
   previewWin=win;
   receiptPreviewImg.removeAttribute('src');
+  receiptSaveTip.hidden=!isWeChat;
+  receiptSaveTip.textContent='微信内请长按上方票据图片保存到手机；如需自动下载，请点击右上角并选择浏览器打开。';
+  downloadReceiptBtn.textContent=isWeChat?'长按上方图片保存':'重新下载截图';
   if(autoOpen)modal.classList.remove('show');
   makeReceipt(win,url=>{receiptPreviewImg.src=url;receiptModal.classList.add('show')});
 }
