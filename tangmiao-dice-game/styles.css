@@ -340,3 +340,96 @@ input:disabled { background: #f9f6f8; color: #b4a8b2; }
 @keyframes floaty { 0%,100% { transform: translateY(0) rotate(45deg) scale(.9); } 50% { transform: translateY(-12px) rotate(45deg) scale(1.12); } }
 @keyframes orbitPulse { 0%,100% { opacity: .42; transform: rotate(-12deg) scale(.95); } 50% { opacity: .72; transform: rotate(-5deg) scale(1.05); } }
 @keyframes buttonShine { 0%, 68% { left: -34%; opacity: 0; } 72% { opacity: 1; } 88% { left: 118%; opacity: .72; } 100% { left: 118%; opacity: 0; } }
+
+/* V7 · mobile-first refinements */
+@media (max-width: 640px) {
+  body { background: linear-gradient(#fffafd, #fffdfb 58%, #f9fcff); }
+  .page-shell { padding: 0 8px 24px; }
+  .app { width: 100%; }
+
+  .hero { margin: 8px 0 10px; border-radius: 20px; }
+  .hero-title { left: 14px; right: 14px; bottom: 12px; }
+  .hero-title h2 { font-size: clamp(21px, 6.6vw, 27px); }
+  .brand-kicker { font-size: 8.5px; }
+
+  .game-card, .steps, .history-section, .rules-preview {
+    padding: 14px;
+    border-radius: 21px;
+  }
+  .game-card, .steps, .history-section { margin-bottom: 10px; }
+  .card-topline, .section-heading { gap: 10px; }
+  .card-topline h2, .section-heading h2 { font-size: 18px; }
+  .eyebrow { font-size: 9.5px; }
+  .status-pill { min-height: 31px; padding: 0 10px; font-size: 11px; }
+
+  .dice-stage {
+    min-height: 218px;
+    margin: 14px 0 16px;
+    border-radius: 20px;
+    gap: 13px;
+  }
+  .dice-wrap { transform: scale(.92); }
+  .result-copy { font-size: 13px; padding: 0 8px; }
+  .result-copy strong { font-size: 17px; }
+
+  .redeem-form label { margin-bottom: 7px; }
+  .input-row { gap: 8px; }
+  .input-row input, .btn-secondary, .roll-button { min-height: 48px; }
+  .form-message, .mini-note { font-size: 11.5px; line-height: 1.5; }
+
+  .step-grid { gap: 8px; margin-top: 14px; }
+  .step-item {
+    min-height: 92px;
+    padding: 12px 44px 12px 12px;
+    border-radius: 16px;
+  }
+  .step-icon { width: 38px; height: 38px; margin-bottom: 9px; border-radius: 12px; }
+  .step-item h3 { font-size: 13.5px; }
+  .step-item p { font-size: 11.5px; }
+
+  .history-heading { margin-bottom: 12px; }
+  .history-item { gap: 9px; padding: 10px; border-radius: 16px; }
+  .history-main strong { font-size: 14px; }
+  .history-main span { font-size: 10.5px; }
+  .small-button { min-height: 40px; }
+
+  .notice-grid { grid-template-columns: 1fr; gap: 9px; margin-top: 14px; }
+  .notice-card {
+    display: grid;
+    grid-template-columns: 126px minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 108px;
+    border-radius: 17px;
+  }
+  .notice-image-button { height: 108px; border-radius: 0; }
+  .notice-meta {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 13px;
+  }
+  .notice-meta strong { font-size: 14px; }
+  .notice-meta span { font-size: 8.5px; line-height: 1.35; }
+  .image-overlay { right: 7px; bottom: 7px; padding: 5px 7px; font-size: 10px; }
+
+  .site-footer { gap: 2px; padding: 18px 4px 2px; font-size: 11px; line-height: 1.55; }
+
+  .image-dialog, .receipt-dialog {
+    width: calc(100vw - 16px);
+    max-height: 90vh;
+    border-radius: 18px;
+  }
+  .dialog-head { padding: 13px 13px 11px; }
+  .image-dialog-body { padding: 9px; max-height: 76vh; }
+  .image-dialog-body img { border-radius: 12px; }
+  .receipt-preview-wrap { padding: 9px; max-height: 72vh; }
+}
+
+@media (max-width: 380px) {
+  .page-shell { padding-inline: 6px; }
+  .game-card, .steps, .history-section, .rules-preview { padding: 12px; }
+  .notice-card { grid-template-columns: 112px minmax(0, 1fr); min-height: 100px; }
+  .notice-image-button { height: 100px; }
+  .hero-title h2 { font-size: 21px; }
+}

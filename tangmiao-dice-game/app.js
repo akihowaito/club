@@ -1,10 +1,110 @@
 (() => {
   "use strict";
 
-  const VALID_CODES = new Set(["TANGMIAO0913", "TOMIA2026ONCE"]);
-  const TEST_CODES = new Set(["TANGMIAO0913"]);
-  const STORAGE_PREFIX = "tangmiao_dice_v2:";
-  const HISTORY_KEY = "tangmiao_dice_v2:history";
+  const VALID_CODES = new Set([
+    "TM26-UCTY-BGC3",
+    "TM26-ZLVE-TDTB",
+    "TM26-NFRC-34TW",
+    "TM26-29QD-YPMR",
+    "TM26-S2ZH-SY4F",
+    "TM26-FN2T-ZETF",
+    "TM26-KKZ5-A9Y9",
+    "TM26-QYPA-UWU5",
+    "TM26-CWP8-686D",
+    "TM26-2QLJ-8H43",
+    "TM26-BQ9N-BS24",
+    "TM26-647N-UNC9",
+    "TM26-SPDT-T7N6",
+    "TM26-X6V9-PCHR",
+    "TM26-9XR4-K8GN",
+    "TM26-ZY4D-V53V",
+    "TM26-LRH7-F6UB",
+    "TM26-CGB2-GRN5",
+    "TM26-R4FV-LBA7",
+    "TM26-EN3D-6PJL",
+    "TM26-UEED-V7Q7",
+    "TM26-B8UN-LSLD",
+    "TM26-GRSH-7JP9",
+    "TM26-E6DJ-7X55",
+    "TM26-5BVD-25L2",
+    "TM26-ZUYP-U2E4",
+    "TM26-9GYT-H97H",
+    "TM26-XN58-6H9U",
+    "TM26-LN6F-LZ46",
+    "TM26-5P92-HM5Y",
+    "TM26-BHXG-V864",
+    "TM26-DZKM-LEJN",
+    "TM26-MEFT-KPA7",
+    "TM26-J3CX-DHAF",
+    "TM26-F325-VVQ5",
+    "TM26-DGMH-XL3H",
+    "TM26-726Z-VUJD",
+    "TM26-WCSS-DJ95",
+    "TM26-MK8S-EL4M",
+    "TM26-VR3C-USVH",
+    "TM26-2RQL-RB8H",
+    "TM26-KQHC-9YT5",
+    "TM26-7568-ZJNE",
+    "TM26-M4TL-E76N",
+    "TM26-64VK-RTAE",
+    "TM26-8NL6-BGS4",
+    "TM26-CFCT-8AKH",
+    "TM26-ACD2-VA3W",
+    "TM26-3YB2-FJ25",
+    "TM26-JZU9-KHUU",
+    "TM26-DHNS-YQFF",
+    "TM26-YZGJ-9XFL",
+    "TM26-5S2H-KBHX",
+    "TM26-WKS5-UAHW",
+    "TM26-DVNE-Q3AA",
+    "TM26-D4PZ-RVNQ",
+    "TM26-Y66R-5Y88",
+    "TM26-F6W5-47V5",
+    "TM26-G7NH-VUX2",
+    "TM26-5ZSB-D22X",
+    "TM26-Z6GX-66WR",
+    "TM26-NZQE-FLUN",
+    "TM26-TRK8-8LAQ",
+    "TM26-354U-NNA3",
+    "TM26-49U6-MDXC",
+    "TM26-FH7G-K8BG",
+    "TM26-YV9S-JF7X",
+    "TM26-JELM-V8MM",
+    "TM26-3W44-MPBV",
+    "TM26-5XTM-GXY6",
+    "TM26-JHZE-2KET",
+    "TM26-HZJR-NKQL",
+    "TM26-TS22-YSN7",
+    "TM26-U6P5-NMEK",
+    "TM26-6AFN-3FYM",
+    "TM26-XF9L-PVBS",
+    "TM26-3MCD-DMF4",
+    "TM26-7QS5-7AFY",
+    "TM26-Q2P8-9VAD",
+    "TM26-DQPG-FBZC",
+    "TM26-TZBA-LWTV",
+    "TM26-V56J-A3P3",
+    "TM26-DBS2-CTTV",
+    "TM26-VHSP-PGWG",
+    "TM26-DEVY-SCA3",
+    "TM26-SFRH-CWHC",
+    "TM26-CG74-XAPQ",
+    "TM26-A7FF-VMN6",
+    "TM26-ZXL6-4FRK",
+    "TM26-RPGF-R8QM",
+    "TM26-47PZ-STC8",
+    "TM26-79MV-5ZED",
+    "TM26-7YXK-4ZFU",
+    "TM26-XEX9-RD6G",
+    "TM26-G9TN-D6CH",
+    "TM26-57WL-KDLB",
+    "TM26-W83T-PJ86",
+    "TM26-VMZR-NAVP",
+    "TM26-38BQ-QY36",
+    "TM26-2AMX-M83D",
+  ]);
+  const STORAGE_PREFIX = "tangmiao_dice_v3:";
+  const HISTORY_KEY = "tangmiao_dice_v3:history";
   const MAX_HISTORY = 30;
   const FACE_TRANSFORMS = {
     1: "rotateX(0deg) rotateY(0deg)",
@@ -40,7 +140,6 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let activeCode = null;
-  let activeIsTest = false;
   let currentResult = null;
   let currentReceiptRecord = null;
   let isRolling = false;
@@ -115,21 +214,19 @@
     redeemButton.querySelector("span").textContent = locked ? "已兑换" : "验证口令";
   }
 
-  function showReady(code, isTest) {
+  function showReady(code) {
     activeCode = code;
-    activeIsTest = isTest;
     currentResult = null;
     setRedeemLocked(true, code);
     rollButton.disabled = false;
-    rollLabel.textContent = isTest ? "掷骰子 · 测试无限次数" : "掷骰子";
-    setStatus(isTest ? "测试模式" : "剩余 1 次", isTest ? "test" : "ready");
-    setMessage(isTest ? "测试口令验证成功，可无限重复掷骰。" : "兑换成功，现在可以掷骰 1 次。", isTest ? "test" : "success");
+    rollLabel.textContent = "掷骰子";
+    setStatus("剩余 1 次", "ready");
+    setMessage("兑换成功，现在可以掷骰 1 次。", "success");
     resultCopy.textContent = "口令已验证，点击下方按钮开始。";
   }
 
   function showFinished(code, result) {
     activeCode = code;
-    activeIsTest = false;
     currentResult = Number(result);
     setRedeemLocked(true, code);
     rollButton.disabled = true;
@@ -149,13 +246,12 @@
     return Math.floor(Math.random() * 6) + 1;
   }
 
-  function createRecord(code, result, isTest) {
+  function createRecord(code, result) {
     const now = new Date();
     return {
       id: `${now.getTime()}-${Math.random().toString(36).slice(2, 8)}`,
       code,
       result,
-      isTest,
       rolledAt: now.toISOString(),
       timeText: formatDateTime(now),
       device: getDeviceSummary(),
@@ -369,7 +465,7 @@
       ["兑换口令", record.code],
       ["设备信息", record.device],
       ["记录编号", record.id],
-      ["口令类型", record.isTest ? "测试口令 · 无限测试" : "正式口令 · 一次有效"]
+      ["口令类型", "兑换口令 · 一次有效"]
     ];
     let y = 878;
     for (const [label, value] of rows) {
@@ -383,7 +479,7 @@
 
     drawRoundedRect(c, 112, 1236, 856, 72, 28, "#fff0f6", null);
     c.fillStyle = "#c05583"; c.font = "800 24px sans-serif"; c.textAlign = "center";
-    c.fillText("糖喵电竞 ♡ Tomia Club · Made by akihowaito", 540, 1282);
+    c.fillText("糖喵电竞 ♡ Tomia Club", 540, 1282);
     c.fillStyle = "#aa95a3"; c.font = "500 20px sans-serif";
     c.fillText("最终解释权归糖喵电竞所有", 540, 1330);
     c.textAlign = "left";
@@ -409,7 +505,7 @@
   function autoDownloadReceipt(record) {
     try {
       downloadReceipt(record);
-      setMessage(activeIsTest ? "结果截图已自动下载。测试口令仍可继续掷骰。" : "结果截图已自动下载，可在历史记录再次查看。", activeIsTest ? "test" : "success");
+      setMessage("结果截图已自动下载，可在历史记录再次查看。", "success");
     } catch {
       setMessage("自动下载被浏览器阻止，可在历史记录中查看截图。", "success");
     }
@@ -427,7 +523,7 @@
       <article class="history-item" data-record-id="${escapeHTML(record.id)}">
         <div class="history-die">${Number(record.result) || "-"}</div>
         <div class="history-main">
-          <strong>${Number(record.result) || "-"} 点 · ${record.isTest ? "测试记录" : "正式记录"}</strong>
+          <strong>${Number(record.result) || "-"} 点 · 骰子记录</strong>
           <span>${escapeHTML(record.timeText || formatDateTime(record.rolledAt))} · ${escapeHTML(record.device || "设备未知")}</span>
         </div>
         <div class="history-actions">
@@ -460,7 +556,7 @@
   function rollDice() {
     if (!activeCode || isRolling) return;
     const state = readState(activeCode);
-    if (!activeIsTest && (!state || state.rolled)) {
+    if (!state || state.rolled) {
       if (state && state.result) showFinished(activeCode, state.result);
       return;
     }
@@ -492,30 +588,22 @@
       dice.style.transform = final;
       animation.cancel();
       const now = new Date();
-      if (!activeIsTest) {
-        saveState(activeCode, {
-          redeemedAt: state && state.redeemedAt ? state.redeemedAt : now.toISOString(),
-          rolled: true,
-          result,
-          rolledAt: now.toISOString()
-        });
-      }
+      saveState(activeCode, {
+        redeemedAt: state && state.redeemedAt ? state.redeemedAt : now.toISOString(),
+        rolled: true,
+        result,
+        rolledAt: now.toISOString()
+      });
       currentResult = result;
-      const record = createRecord(activeCode, result, activeIsTest);
+      const record = createRecord(activeCode, result);
       addHistory(record);
       resultCopy.innerHTML = `本次结果：<strong>${result} 点</strong>`;
       burstParticles();
       isRolling = false;
 
-      if (activeIsTest) {
-        setStatus("测试模式", "test");
-        rollLabel.textContent = "再掷一次 · 测试无限次数";
-        rollButton.disabled = false;
-      } else {
-        setStatus("已完成", "done");
-        rollLabel.textContent = "本次机会已使用";
-        rollButton.disabled = true;
-      }
+      setStatus("已完成", "done");
+      rollLabel.textContent = "本次机会已使用";
+      rollButton.disabled = true;
 
       window.setTimeout(() => autoDownloadReceipt(record), prefersReducedMotion ? 20 : 260);
     };
@@ -532,16 +620,10 @@
       setMessage("口令无效，请检查后重新输入。", "error"); input.select(); return;
     }
 
-    const isTest = TEST_CODES.has(code);
-    if (isTest) {
-      showReady(code, true);
-      return;
-    }
-
     const existing = readState(code);
     if (existing) {
       if (existing.rolled && existing.result) showFinished(code, existing.result);
-      else showReady(code, false);
+      else showReady(code);
       return;
     }
 
@@ -549,7 +631,7 @@
     if (!ok) {
       setMessage("无法记录兑换状态，请刷新页面后重试。", "error"); return;
     }
-    showReady(code, false);
+    showReady(code);
   });
 
   rollButton.addEventListener("click", rollDice);

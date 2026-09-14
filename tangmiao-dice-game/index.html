@@ -60,7 +60,7 @@
             <input id="codeInput" name="code" type="text" inputmode="text" autocomplete="off" maxlength="32" placeholder="请输入兑换口令" aria-describedby="formMessage" />
             <button class="btn btn-secondary interactive" id="redeemButton" type="submit"><span>验证口令</span></button>
           </div>
-          <p class="form-message" id="formMessage">正式口令仅可兑换 1 次；测试口令可无限测试。</p>
+          <p class="form-message" id="formMessage">每个兑换口令仅可使用 1 次。</p>
         </form>
 
         <button class="roll-button interactive" id="rollButton" type="button" disabled>
@@ -89,7 +89,7 @@
             <span class="step-num">01</span>
             <div class="step-icon pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7h-2.2A3.2 3.2 0 0 0 12 5.1 3.2 3.2 0 0 0 6.2 7H4a2 2 0 0 0-2 2v2h20V9a2 2 0 0 0-2-2ZM8.8 5.8c-.8 0-1.4-.5-1.4-1.1s.6-1.1 1.4-1.1c1.1 0 2.1 1.1 2.5 2.2H8.8Zm6.4 0h-2.5c.4-1.1 1.4-2.2 2.5-2.2.8 0 1.4.5 1.4 1.1s-.6 1.1-1.4 1.1ZM3 13h8v9H5a2 2 0 0 1-2-2v-7Zm10 0h8v7a2 2 0 0 1-2 2h-6v-9Z"/></svg></div>
             <h3>兑换口令</h3>
-            <p>正式口令一次有效，测试口令可重复使用。</p>
+            <p>每个兑换口令仅可使用一次。</p>
           </article>
           <article class="step-item interactive-card">
             <span class="step-num">02</span>
@@ -122,17 +122,31 @@
         <div class="section-heading">
           <div>
             <div class="eyebrow">NOTICE & RULES</div>
-            <h2 id="rules-preview-title">赔付须知</h2>
+            <h2 id="rules-preview-title">下单 / 赔付 / 权益须知</h2>
           </div>
-          <span class="section-caption">点击查看原图</span>
+          <span class="section-caption">点击图片查看原图</span>
         </div>
-        <div class="notice-grid notice-grid-single">
-          <article class="notice-card interactive-card notice-card-single">
+        <div class="notice-grid">
+          <article class="notice-card interactive-card">
+            <button class="notice-image-button" type="button" data-rule-src="assets/rules-green.jpg" data-rule-title="下单须知">
+              <img src="assets/rules-green.jpg" alt="下单须知顶部预览" loading="lazy" />
+              <span class="image-overlay">查看原图</span>
+            </button>
+            <div class="notice-meta"><strong>下单须知</strong><span>ORDER NOTICE</span></div>
+          </article>
+          <article class="notice-card interactive-card">
             <button class="notice-image-button" type="button" data-rule-src="assets/rules-compensation-new.jpg" data-rule-title="赔付须知">
-              <img src="assets/rules-compensation-new.jpg" alt="赔付须知预览" loading="lazy" />
+              <img src="assets/rules-compensation-new.jpg" alt="赔付须知顶部预览" loading="lazy" />
               <span class="image-overlay">查看原图</span>
             </button>
             <div class="notice-meta"><strong>赔付须知</strong><span>COMPENSATION NOTICE</span></div>
+          </article>
+          <article class="notice-card interactive-card">
+            <button class="notice-image-button" type="button" data-rule-src="assets/rules-rights.jpg" data-rule-title="权益须知">
+              <img src="assets/rules-rights.jpg" alt="权益须知顶部预览" loading="lazy" />
+              <span class="image-overlay">查看原图</span>
+            </button>
+            <div class="notice-meta"><strong>权益须知</strong><span>PLAYER RIGHTS</span></div>
           </article>
         </div>
       </section>
