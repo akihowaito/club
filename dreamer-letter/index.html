@@ -97,12 +97,6 @@ button,input,select,textarea{font-family:inherit;color:inherit;}
 }
 .save-top:hover{background:#6b4254;}
 .save-top:active{transform:translateY(1px);}
-@media (max-width:980px){
-  .masthead{gap:10px;}
-  .mast-spacer{flex-basis:100%;height:0;}
-  .export{width:100%;justify-content:flex-start;}
-  .export .dim{max-width:none;text-align:left;flex-basis:100%;}
-}
 
 /* ---------- shell ---------- */
 .shell{
@@ -111,10 +105,6 @@ button,input,select,textarea{font-family:inherit;color:inherit;}
   gap:0;
   flex:1;
   min-height:0;
-}
-@media (max-width:980px){
-  html,body{height:auto;}
-  .shell{grid-template-columns:1fr;flex:none;}
 }
 
 /* ---------- left: desk ---------- */
@@ -158,7 +148,6 @@ button,input,select,textarea{font-family:inherit;color:inherit;}
   flex:1;
   min-height:0;
 }
-@media (max-width:980px){.pages{max-height:none;}}
 .page[hidden]{display:none;}
 
 .group{margin-bottom:22px;}
@@ -307,9 +296,6 @@ input[type=file]{display:none;}
   min-height:0;
   padding:14px 18px 18px;
 }
-@media (max-width:980px){
-  .table{position:sticky;top:0;z-index:5;padding:10px 12px 12px;border-bottom:1px solid var(--rule);}
-}
 .bar{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   padding-bottom:12px;
@@ -333,12 +319,92 @@ input[type=file]{display:none;}
   display:flex;align-items:flex-start;justify-content:center;
   padding:4px;
 }
-@media (max-width:980px){.sheet{max-height:46vh;}}
 #cv{
   display:block;
   box-shadow:0 10px 34px rgba(124,79,99,.16),0 1px 3px rgba(124,79,99,.12);
   border-radius:2px;
   flex:none;
+}
+.only-mobile{display:none;}
+
+/* ---------- phones ---------- */
+@media (max-width:980px){
+  html,body{height:auto;}
+  .shell{
+    display:flex;
+    flex-direction:column;
+    flex:none;
+  }
+
+  /* the sheet is what you're working on, so it stays in view while you type */
+  .table{
+    order:-1;
+    position:sticky;
+    top:0;
+    z-index:20;
+    padding:8px 10px 10px;
+    border-bottom:1px solid var(--rule);
+    background:var(--paper);
+  }
+  .sheet{
+    height:34vh;
+    max-height:34vh;
+    flex:none;
+  }
+  .table.collapsed .sheet{display:none;}
+  .bar{padding-bottom:8px;gap:6px;}
+  .only-mobile{display:inline-flex;}
+
+  .desk{border-right:none;}
+  .tabs{
+    position:sticky;
+    top:var(--tabtop,0px);
+    z-index:15;
+    padding:0;
+    gap:0;
+    background:var(--card);
+  }
+  .tab{
+    border-radius:0;
+    margin-bottom:0;
+    padding:13px 4px;
+    min-height:46px;
+    font-size:13.5px;
+    border-bottom:2px solid transparent;
+  }
+  .tab[aria-selected="true"]{
+    border-color:transparent transparent var(--mauve);
+    background:var(--card);
+  }
+  /* the page scrolls as one; no nested scroll area to fight with */
+  .pages{
+    overflow:visible;
+    flex:none;
+    min-height:0;
+    padding:18px 16px 30px;
+  }
+
+  /* 16px keeps iOS from zooming the whole page when a field gets focus */
+  input[type=text],textarea,select,.gate-card input{font-size:16px;}
+  textarea{min-height:110px;}
+  .seg button{padding:11px 4px;min-height:44px;font-size:13px;}
+  input[type=range]{height:30px;}
+  .file-btn{padding:16px 12px;}
+  .ghost{padding:12px;}
+  .reset{padding:10px 16px;}
+  .deskfoot{padding:12px 16px;}
+
+  .masthead{gap:8px;padding:12px 16px 10px;}
+  .wordmark{font-size:22px;}
+  .mast-spacer{flex-basis:100%;height:0;}
+  .export{width:100%;justify-content:flex-start;gap:6px;}
+  .export .dim{display:none;}
+  .export input.fname{flex:1;min-width:0;width:auto;}
+  .export select.mini{padding:9px 26px 9px 9px;}
+  .save-top{padding:10px 16px;}
+}
+@media (max-width:560px){
+  .masthead p{display:none;}
 }
 
 /* ---------- gate ---------- */
@@ -474,6 +540,8 @@ input[type=file]{display:none;}
             <button data-v="center" aria-pressed="true">中</button>
             <button data-v="right" aria-pressed="false">右</button>
           </div>
+          <label class="lbl">字号 <span class="val" id="bodyScaleV">1.00×</span></label>
+          <input type="range" id="bodyScale" min="0.4" max="2" step="0.05" value="1">
           <label class="check"><input type="checkbox" id="indent"><span>首行缩进两字（左对齐时生效）</span></label>
         </div>
 
@@ -632,6 +700,7 @@ input[type=file]{display:none;}
       </div>
       <div class="spacer"></div>
       <div class="flag" id="flag" hidden>文字超出区域</div>
+      <button class="zoom only-mobile" id="previewToggle" style="padding:0 11px;height:30px;font-size:12px;">收起</button>
     </div>
     <div class="sheet" id="sheet">
       <canvas id="cv"></canvas>
@@ -657,7 +726,7 @@ const $ = id => document.getElementById(id);
 const S = {
   sal:'', salAlign:'left', salScale:0.95,
   body:document.getElementById('bodyText').value,
-  bodyAlign:'center', indent:false,
+  bodyAlign:'center', bodyScale:1, indent:false,
   tr:'', showTr:false, trScale:0.52,
   sig:'', sigAlign:'right', sigScale:0.8,
   fs:40, lh:1.9, gap:1.0, ls:1,
@@ -808,7 +877,7 @@ function buildBlocks(k, maxW){
   };
   const blocks = [];
   if(S.sal.trim()) blocks.push(mk(S.sal, S.salAlign, S.salScale, false, 1, false));
-  if(S.body.trim()) blocks.push(mk(S.body, S.bodyAlign, 1, false, 1, S.indent && S.bodyAlign==='left'));
+  if(S.body.trim()) blocks.push(mk(S.body, S.bodyAlign, S.bodyScale, false, 1, S.indent && S.bodyAlign==='left'));
   if(S.showTr && S.tr.trim()) blocks.push(mk(S.tr, S.bodyAlign, S.trScale, true, 0.75));
   if(S.sig.trim()) blocks.push(mk(S.sig, S.sigAlign, S.sigScale, false, 1, false));
 
@@ -947,17 +1016,36 @@ function fitScale(){
 function applyZoom(){
   const {w:PW, h:PH} = pageSize();
   const cssW = (S.mode === 'spread' ? PW*2 : PW);
+  if(!sheet.clientWidth) return;      // preview collapsed; nothing to size yet
   const z = zoom === null ? fitScale() : zoom;
   cv.style.width  = Math.round(cssW*z) + 'px';
   cv.style.height = Math.round(PH*z) + 'px';
   document.getElementById('zPct').textContent = zoom === null ? '适应' : Math.round(z*100)+'%';
 }
+// the preview is pinned on phones, so the tab strip has to stick below it, not under it
+function syncStickyOffset(){
+  const h = (window.innerWidth <= 980)
+    ? document.querySelector('.table').offsetHeight
+    : 0;
+  document.documentElement.style.setProperty('--tabtop', h + 'px');
+}
+
+$('previewToggle').addEventListener('click', () => {
+  const t = document.querySelector('.table');
+  const collapsed = t.classList.toggle('collapsed');
+  $('previewToggle').textContent = collapsed ? '展开' : '收起';
+  if(!collapsed) requestAnimationFrame(applyZoom);
+  requestAnimationFrame(syncStickyOffset);
+});
 function setZoom(z){ zoom = z; applyZoom(); }
 document.getElementById('zIn').onclick  = () => setZoom(Math.min(4, (zoom===null?fitScale():zoom)*1.25));
 document.getElementById('zOut').onclick = () => setZoom(Math.max(0.08, (zoom===null?fitScale():zoom)/1.25));
 document.getElementById('zFit').onclick = () => setZoom(null);
 document.getElementById('z100').onclick = () => setZoom(1);
-window.addEventListener('resize', () => { if(zoom === null) applyZoom(); });
+window.addEventListener('resize', () => {
+  if(zoom === null) applyZoom();
+  syncStickyOffset();
+});
 
 // Browsers cap total canvas pixels (Safari is the tightest). Clamp before we ask for a blob.
 const MAX_PIXELS = 28e6;
@@ -1155,7 +1243,8 @@ TEXTS.forEach(([id,key]) => {
 
 // one spec table drives both the listeners and restoring a saved session
 const RANGES = [
-  {id:'salScale', key:'salScale', fmt:v => v.toFixed(2)+'×'},
+  {id:'salScale',  key:'salScale',  fmt:v => v.toFixed(2)+'×'},
+  {id:'bodyScale', key:'bodyScale', fmt:v => v.toFixed(2)+'×'},
   {id:'trScale',  key:'trScale',  fmt:v => v.toFixed(2)+'×'},
   {id:'sigScale', key:'sigScale', fmt:v => v.toFixed(2)+'×'},
   {id:'fs',  key:'fs',  fmt:v => v+' px'},
@@ -1490,6 +1579,7 @@ async function boot(){
   leftImg.src  = userImg.left  ? userImg.left.data  : DEFAULT_LEFT;
   rightImg.src = userImg.right ? userImg.right.data : DEFAULT_RIGHT;
   updateDim();
+  requestAnimationFrame(syncStickyOffset);
 }
 
 if(gatePassed()) unlock();
