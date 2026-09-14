@@ -340,9 +340,78 @@ input[type=file]{display:none;}
   border-radius:2px;
   flex:none;
 }
+
+/* ---------- gate ---------- */
+.gate{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:
+    radial-gradient(circle at 50% 38%,#fffdfc 0%,var(--paper) 55%,var(--paper-deep) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.gate[hidden]{display:none;}
+.gate-card{
+  width:100%;
+  max-width:340px;
+  text-align:center;
+}
+.gate-card .wordmark{font-size:34px;margin-bottom:6px;}
+.gate-card p{margin:0 0 26px;font-size:12.5px;color:var(--ink-soft);}
+.gate-card input{
+  width:100%;
+  margin-bottom:10px;
+  text-align:center;
+  padding:11px;
+  font-size:13.5px;
+  border:1px solid var(--rule);
+  border-radius:10px;
+  background:var(--card);
+}
+.gate-card input:focus{border-color:var(--mauve);}
+.gate-card button{
+  width:100%;
+  margin-top:6px;
+  border:none;
+  border-radius:10px;
+  background:var(--plum);
+  color:#fff;
+  padding:12px;
+  font-size:13.5px;
+  font-weight:500;
+  cursor:pointer;
+}
+.gate-card button:hover{background:#6b4254;}
+.gate-msg{
+  min-height:18px;
+  margin-top:12px !important;
+  margin-bottom:0 !important;
+  color:#b4514f !important;
+  font-size:12px;
+}
+.shake{animation:shake .3s;}
+@keyframes shake{
+  25%{transform:translateX(-6px);}
+  75%{transform:translateX(6px);}
+}
+@media (prefers-reduced-motion:reduce){.shake{animation:none;}}
 </style>
 </head>
 <body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="wordmark">Dreamer <em>club</em></div>
+    <p>请登录后使用</p>
+    <input type="text" id="gUser" placeholder="账号" autocomplete="username">
+    <input type="password" id="gPass" placeholder="密码" autocomplete="current-password">
+    <button id="gGo">进入</button>
+    <p class="gate-msg" id="gMsg"></p>
+  </div>
+</div>
 
 <header class="masthead">
   <div class="wordmark">Dreamer <em>club</em></div>
@@ -542,6 +611,7 @@ input[type=file]{display:none;}
 
     <div class="deskfoot">
       <span class="stat" id="saveStat">会自动保存在这台设备</span>
+      <button class="reset" id="signOut">退出</button>
       <button class="reset" id="resetAll">重置</button>
     </div>
   </div>
@@ -1333,8 +1403,83 @@ $('save').addEventListener('click', () => {
   }, type, 0.94);
 });
 
+/* ================= gate ================= */
+/*
+ * This is a curtain, not a lock. The check runs in the browser, so anyone who
+ * opens devtools can walk around it. It keeps casual visitors out of a public
+ * URL; it does not protect anything. For real access control put the page
+ * behind Cloudflare Access or a private host instead.
+ *
+ * To change the login: set ACCOUNT below, and replace PASS_HASH with the number
+ * printed by hash('your new password') in the console.
+ */
+const ACCOUNT   = 'dreamer-admin';
+const PASS_HASH = 1966131019;          // dreamer2026
+const GATE_KEY  = 'dreamer-letter-gate';
+const GATE_DAYS = 7;
+
+function hash(s){
+  let h = 5381;
+  for(let i = 0; i < s.length; i++) h = ((h*33) ^ s.charCodeAt(i)) >>> 0;
+  return h;
+}
+window.hash = hash;   // so you can compute a new PASS_HASH from the console
+
+function gatePassed(){
+  try{
+    const raw = localStorage.getItem(GATE_KEY);
+    if(raw && Date.now() < Number(raw)) return true;
+  }catch(e){}
+  try{ return sessionStorage.getItem(GATE_KEY) === '1'; }catch(e){}
+  return false;
+}
+function rememberGate(){
+  const until = Date.now() + GATE_DAYS*864e5;
+  try{ localStorage.setItem(GATE_KEY, String(until)); return; }catch(e){}
+  try{ sessionStorage.setItem(GATE_KEY, '1'); }catch(e){}
+}
+function forgetGate(){
+  try{ localStorage.removeItem(GATE_KEY); }catch(e){}
+  try{ sessionStorage.removeItem(GATE_KEY); }catch(e){}
+}
+
+let booted = false;
+function unlock(){
+  $('gate').hidden = true;
+  if(booted) return;
+  booted = true;
+  boot();
+}
+function tryLogin(){
+  const u = $('gUser').value.trim();
+  const p = $('gPass').value;
+  if(u === ACCOUNT && hash(p) === PASS_HASH){
+    rememberGate();
+    unlock();
+  } else {
+    const card = document.querySelector('.gate-card');
+    $('gMsg').textContent = '账号或密码不对';
+    card.classList.remove('shake');
+    void card.offsetWidth;
+    card.classList.add('shake');
+    $('gPass').value = '';
+    $('gPass').focus();
+  }
+}
+$('gGo').addEventListener('click', tryLogin);
+['gUser','gPass'].forEach(id => {
+  $(id).addEventListener('keydown', e => { if(e.key === 'Enter') tryLogin(); });
+});
+$('signOut').addEventListener('click', () => {
+  forgetGate();
+  $('gPass').value = '';
+  $('gMsg').textContent = '';
+  $('gate').hidden = false;
+  $('gUser').focus();
+});
+
 /* ================= boot ================= */
-(async function boot(){
+async function boot(){
   fillSelects();
   let had = false;
   try{ had = await restore(); }catch(e){}
@@ -1345,7 +1490,10 @@ $('save').addEventListener('click', () => {
   leftImg.src  = userImg.left  ? userImg.left.data  : DEFAULT_LEFT;
   rightImg.src = userImg.right ? userImg.right.data : DEFAULT_RIGHT;
   updateDim();
-})();
+}
+
+if(gatePassed()) unlock();
+else $('gUser').focus();
 </script>
 </body>
 </html>
