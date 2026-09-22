@@ -2,6 +2,7 @@
 <html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="utf-8">
+  <meta name="shunyu-build" content="V20-mobile-two-row-verified">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101123">
   <meta name="description" content="顺宇电竞 · 中秋双节活动。中秋月光抽奖互动体验。">
@@ -603,6 +604,46 @@ body{background:var(--page);isolation:isolate;}
   .rules-grid .rule{padding:10px 11px}
   .rules-grid .rule p{font-size:14px;line-height:1.58}
 }
+
+/* V20 mobile compact tweaks */
+@media (max-width:430px){
+  .hero{height:322px}
+  .hero-copy{padding:24px 18px 0}
+  .hero h1{margin:14px 0 10px}
+  .hero-pills{
+    display:grid !important;
+    grid-template-columns:max-content max-content;
+    align-items:start;
+    justify-content:start;
+    width:auto;
+    max-width:100%;
+    gap:6px 6px;
+    margin-top:14px;
+  }
+  .hero-pill{
+    min-height:30px;
+    padding:7px 10px;
+    font-size:9px;
+    gap:3px;
+  }
+  .hero-pill:nth-child(3){grid-column:1 / span 2;}
+  .sidebar-card{padding:17px}
+  .side-heading h2{font-size:18px}
+  .side-intro{margin:10px 0 18px;font-size:11px;line-height:1.8}
+  .code-input{height:52px;font-size:12px;padding:0 42px 0 14px}
+  .verify{height:42px;margin-top:9px;font-size:11px;border-radius:12px}
+  .status{margin:12px 0 0;font-size:10px;line-height:1.55}
+  .divline{margin:16px 0}
+  .draw-btn{height:56px;border-radius:14px;font-size:14px;gap:9px;letter-spacing:.05em}
+  .draw-btn svg{width:16px;height:16px}
+  .draw-hint{margin:10px 0 0;font-size:10px;line-height:1.65}
+}
+@media (max-width:360px){
+  .hero-pills{gap:5px 5px}
+  .hero-pill{padding:6px 8px;font-size:8px;min-height:28px}
+  .draw-btn{height:52px;font-size:13px;gap:8px}
+}
+
 </style>
 <script>
   (() => {
