@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#201629">
+  <meta name="theme-color" content="#101123">
   <meta name="description" content="顺宇电竞 · 中秋双节活动。中秋月光抽奖互动体验。">
   <title>顺宇电竞·中秋双节活动</title>
   <link rel="preconnect" href="https://imgaly.51shazhu.com" crossorigin>
@@ -607,7 +607,10 @@ body{background:var(--page);isolation:isolate;}
 <script>
   (() => {
     let theme = 'light';
-    try { if (localStorage.getItem('shunyu_club_theme_v2') === 'dark') theme = 'dark'; } catch (_) {}
+    try {
+      const saved = localStorage.getItem('shunyu_club_theme_v3');
+      if (saved === 'light' || saved === 'dark') theme = saved;
+    } catch (_) {}
     document.documentElement.setAttribute('data-theme', theme);
     document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#101123' : '#f8f7ff');
   })();
@@ -632,7 +635,7 @@ body{background:var(--page);isolation:isolate;}
       <div class="top-actions"><a class="mini-button" id="kookBtn" href="https://kook.vip/Sqa9Ze" target="_blank" rel="noopener noreferrer" title="前往 KOOK 频道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>KOOK 1087</a><button class="mini-button theme-button" id="themeBtn" type="button" aria-label="切换至深色模式" title="切换至深色模式" aria-pressed="false"><span class="theme-glyph" id="themeGlyph" aria-hidden="true">☾</span><span class="theme-label" id="themeLabel">深色</span></button><button class="mini-button icon-only" id="soundBtn" type="button" aria-label="关闭音效" title="音效开关"><svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 4a5 5 0 0 1 0 6m3-9a9 9 0 0 1 0 12"/></svg></button><div class="audio-controls" id="volumePanel" role="group" aria-label="背景音乐音量"><button class="volume-icon" id="volumeMuteBtn" type="button" aria-label="关闭背景音乐" title="播放或静音">♫</button><input id="volumeSlider" type="range" min="0" max="100" step="1" value="20" aria-label="背景音乐音量，百分比"><output id="volumeValue" for="volumeSlider">20%</output></div></div>
     </header>
     <main>
-      <section class="hero glass" aria-labelledby="heroTitle"><div class="hero-copy"><div class="eyebrow"><i></i>MOON & NATIONAL DAY · 双节同庆<i></i></div><h1 id="heroTitle">喜迎双节 <span>好事成双</span></h1><p class="hero-desc">月满好时节 · 好礼正当时<br>凭专属口令，抽取属于你的月光好运。</p><div class="hero-pills"><span class="hero-pill">✦ 活动时间 <b>09.25 — 10.08</b></span><span class="hero-pill">☾ <b>9</b> 款月光好礼</span></div></div><div class="moon-scene" aria-hidden="true"><div class="moon-aura"></div><div class="moon-orbit two"></div><div class="moon-orbit"></div><div class="moon-disc"></div><svg class="moon-rabbit" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg"><path d="M75 59C63 40 60 9 70 4c11-5 15 28 17 50 8-22 15-43 24-38 8 6-4 32-15 49 15 4 26 18 26 37 0 21-17 34-40 34H38c-24 0-28-22-13-34 12-10 30-10 43-7-5-14-2-27 7-36Z" fill="#aa806e" opacity=".64"/><circle cx="112" cy="91" r="2.4" fill="#755265"/><circle cx="27" cy="120" r="12" fill="#aa806e" opacity=".6"/></svg><div class="cloud one"></div><div class="cloud two"></div><div class="cloud three"></div><span class="sparkle a">✦</span><span class="sparkle b">✧</span><span class="sparkle c">✦</span></div><div class="seal" aria-hidden="true">花好月圆 · 万事顺意</div></section>
+      <section class="hero glass" aria-labelledby="heroTitle"><div class="hero-copy"><div class="eyebrow"><i></i>MOON & NATIONAL DAY · 双节同庆<i></i></div><h1 id="heroTitle">喜迎双节 <span>好事成双</span></h1><p class="hero-desc">月满好时节 · 好礼正当时<br>凭专属口令，抽取属于你的月光好运。</p><div class="hero-pills"><span class="hero-pill">✦ 活动时间 <b>09.25 — 10.08</b></span><span class="hero-pill">☾ <b>9</b> 款月光好礼</span><span class="hero-pill">✦ 活动期间任意消费赠送拼豆</span></div></div><div class="moon-scene" aria-hidden="true"><div class="moon-aura"></div><div class="moon-orbit two"></div><div class="moon-orbit"></div><div class="moon-disc"></div><svg class="moon-rabbit" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg"><path d="M75 59C63 40 60 9 70 4c11-5 15 28 17 50 8-22 15-43 24-38 8 6-4 32-15 49 15 4 26 18 26 37 0 21-17 34-40 34H38c-24 0-28-22-13-34 12-10 30-10 43-7-5-14-2-27 7-36Z" fill="#aa806e" opacity=".64"/><circle cx="112" cy="91" r="2.4" fill="#755265"/><circle cx="27" cy="120" r="12" fill="#aa806e" opacity=".6"/></svg><div class="cloud one"></div><div class="cloud two"></div><div class="cloud three"></div><span class="sparkle a">✦</span><span class="sparkle b">✧</span><span class="sparkle c">✦</span></div><div class="seal" aria-hidden="true">花好月圆 · 万事顺意</div></section>
       <section class="rules glass" aria-labelledby="rulesTitle"><div class="rules-head"><h2 id="rulesTitle"><span class="rules-star">✦</span> 双节活动须知 <small>活动规则 · 请先阅读</small></h2><span>中秋双快乐 · 喜迎双节，好事成双。 · 09.25—10.08</span></div><div class="rules-alert">✧ 中秋遇上国庆，好礼成双！抽奖须持有效口令，每枚口令仅对应一次抽奖机会。</div><div class="rules-grid"><div class="rule"><b>01 / 月饼兑换</b><p>20个月饼=40R消费余额；50个月饼=体验单；100个月饼=298保1988保底单。消费余额不可提现。</p></div><div class="rule"><b>02 / 活动福利</b><p>9月25日至10月8日，全场95折（体验单除外）。单次消费满200赠1次抽奖机会；满1000赠5次。</p></div><div class="rule"><b>03 / 额外抽奖机会</b><p>发布小红书测评内容，艾特官号，点赞满30赠1次抽奖机会；好评或差评均可。抽奖口令由俱乐部发放。</p></div></div><div class="rules-fair">温馨提示：洗牌与翻牌为互动环节，奖品依据奖池规则随机产生，所选月饼的位置不影响结果。</div></section>
       <div class="content"><section class="pool glass" aria-labelledby="poolTitle"><div class="section-head"><div><div class="section-kicker">SHUFFLE & PICK · 双节好运</div><h2 id="poolTitle"><span class="moonmark" aria-hidden="true"></span>月光奖池</h2></div><div class="section-sub" id="poolSubtitle">九款双节好礼<br>月饼好礼等你来抽</div></div><div class="deck-status" id="deckStatus" role="status" aria-live="polite">先看看九款好礼 · 兑换口令后开启洗月饼</div><div class="prize-grid mystery-grid" id="prizeGrid" aria-label="九款双节好礼与月饼抽奖"></div><div class="pool-foot"><span><i class="pulse-dot" aria-hidden="true"></i>兑换成功后洗牌，再翻开一张月饼</span><span>开奖后输入新口令继续参与，无需刷新</span></div></section>
         <aside class="side"><section class="sidebar-card glass" aria-labelledby="drawTitle"><div class="side-heading"><h2 id="drawTitle">解锁你的月光好运</h2><span class="step">01 / 02</span></div><p class="side-intro">输入活动口令，点击「洗月饼」，再挑选一张神秘签牌。<br>每枚口令可开启一次翻牌，开奖后可直接兑换下一枚。</p><label class="input-label" for="codeInput">活动专属口令</label><div class="code-wrap"><input id="codeInput" class="code-input" type="text" maxlength="18" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SY26-XXXX-XXXX" aria-describedby="codeStatus"><span class="input-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg></span></div><button id="verifyBtn" class="verify">验证口令 · 解锁抽奖</button><p class="status" id="codeStatus" role="status" aria-live="polite"><span>✧</span><span>等待输入活动口令</span></p><div class="divline"></div><button id="drawBtn" class="draw-btn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12 12 3l9 9-9 9-9-9Z"/><path d="m8 12 3 3 5-6"/></svg><span id="drawLabel">输入口令后开启抽奖</span></button><p class="draw-hint" id="drawHint">抽奖动画约 4 秒 · 中奖结果随机生成</p></section><section class="sidebar-card glass" aria-labelledby="recentTitle"><div class="side-heading"><h2 id="recentTitle">我的幸运记录</h2><span class="step" id="drawCount">0 次</span></div><p class="side-intro" style="margin-bottom:16px">幸运瞬间持续更新 · 向下滑动查看全部记录。</p><div id="recentList" class="recent"><div class="empty">月光还未降临，等待你的第一份好运 ☾</div></div></section></aside></div>
@@ -766,7 +769,7 @@ body{background:var(--page);isolation:isolate;}
     $('themeBtn').addEventListener('click', () => {
       const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       applyTheme(next);
-      try { localStorage.setItem('shunyu_club_theme_v2', next); }
+      try { localStorage.setItem('shunyu_club_theme_v3', next); }
       catch (_) { toast('主题已切换。'); }
       clickSound();
     });
@@ -888,13 +891,28 @@ body{background:var(--page);isolation:isolate;}
         g.beginPath();g.arc(x,y,2+i%3,0,Math.PI*2);g.fill();
       }
       scallopBand(g,0,66,'#fffaf4','#ffe7d8');
-      scallopBand(g,1610,66,'#fff8f4','#ffe7d8');
+      // Keep the lower gradient uninterrupted for the detached club footer.
       g.fillStyle='rgba(255,223,180,.36)';g.beginPath();g.arc(944,252,175,0,Math.PI*2);g.fill();
       g.fillStyle='rgba(255,245,217,.92)';g.beginPath();g.arc(944,252,137,0,Math.PI*2);g.fill();
       g.save();g.shadowColor='rgba(171,111,135,.18)';g.shadowBlur=50;
-      g.fillStyle='rgba(255,255,255,.94)';rrect(g,74,120,1094,1380,52);g.fill();g.restore();
-      g.lineWidth=3;g.strokeStyle='#f4ccbf';rrect(g,92,138,1058,1344,42);g.stroke();
-      for(let i=0;i<9;i++){
+      g.fillStyle='rgba(255,255,255,.94)';rrect(g,74,120,1094,1424,52);g.fill();g.restore();
+      g.lineWidth=3;g.strokeStyle='#f4ccbf';rrect(g,92,138,1058,1388,42);g.stroke();
+      // Preserve the diagonal watermark within the ticket, away from the detached footer.
+      g.save();
+      rrect(g,105,150,1032,1225,35);
+      g.clip();
+      g.translate(621,810);
+      g.rotate(-0.42);
+      g.textAlign='center';
+      g.fillStyle='rgba(220,170,182,.10)';
+      g.font='700 42px "Microsoft YaHei",sans-serif';
+      for(let wy=-560;wy<=560;wy+=180){
+        for(let wx=-780;wx<=780;wx+=420){
+          g.fillText('顺宇电竞 · 官方票据',wx,wy);
+        }
+      }
+      g.restore();
+      for(let i=0;i<10;i++){
         g.fillStyle='#fff2e9';g.beginPath();g.arc(74,205+i*143,14,0,Math.PI*2);g.fill();
         g.beginPath();g.arc(1168,205+i*143,14,0,Math.PI*2);g.fill();
       }
@@ -937,12 +955,16 @@ body{background:var(--page);isolation:isolate;}
       infoCard(x+innerW-halfW,928,halfW,'开奖时间',new Date(lastResult.time).toLocaleString('zh-CN'));
       infoCard(x,1083,innerW,'设备信息',`${device.os} · ${device.browser}  /  ${device.mobile} · ${device.screen}`);
       infoCard(x,1238,innerW,'地区信息',geo.region);
-      g.strokeStyle='#efd2cb';g.lineWidth=2;g.beginPath();g.moveTo(168,1408);g.lineTo(1074,1408);g.stroke();
-      // Closing message is plain text: no extra card or frame.
-      g.textAlign='center';g.fillStyle='#986579';g.font='700 27px "Microsoft YaHei",sans-serif';
-      g.fillText('感谢板板光临小店，请凭结算小票截图找客服登记核销',621,1461);
-      g.fillStyle='#9c7a7c';g.font='700 24px "Microsoft YaHei",sans-serif';
-      g.fillText('KOOK 1087 · 顺宇电竞 SHUNYU CLUB',621,1560);
+      // Divider and centered service notice, with padding from both divider and bottom outline.
+      g.strokeStyle='#efd2cb';g.lineWidth=2;g.beginPath();g.moveTo(168,1406);g.lineTo(1074,1406);g.stroke();
+      g.textAlign='center';
+      g.fillStyle='#986579';g.font='700 24px "Microsoft YaHei",sans-serif';
+      g.fillText('感谢板板光临小店，请凭结算小票截图找客服登记核销',621,1451,890);
+      g.fillStyle='#a67d82';g.font='700 23px "Microsoft YaHei",sans-serif';
+      g.fillText('请在10分钟内找客服兑换否则无效',621,1490,890);
+      // The club signature sits OUTSIDE the white ticket on the pink page background.
+      g.fillStyle='#8a6c79';g.font='700 26px "Microsoft YaHei",sans-serif';
+      g.fillText('KOOK 1087 · 顺宇电竞 SHUNYU CLUB',621,1626,1000);
       const dataUrl=canvas.toDataURL('image/png');
       ticketAssetCache={id:lastResult.id,dataUrl};return ticketAssetCache;
     }
