@@ -1,0 +1,52 @@
+name: Restore Mioo V4 design and receipt
+on:
+  push:
+    paths:
+      - mioo-gacha/v4-css-part2.txt
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Restore original stylesheet and simplify receipt dialog
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import base64,gzip,hashlib,re
+          from pathlib import Path
+          folder=Path('mioo-gacha')
+          b64=''.join((folder/f'v4-css-part{i}.txt').read_text().strip() for i in (1,2))
+          original=gzip.decompress(base64.b64decode(b64,validate=True))
+          assert hashlib.sha256(original).hexdigest()=='e98e7a9aec78e8c8d4f788ba9d0624c299e0568fad358ef28a633ea343e0a54c'
+          (folder/'v4-original.css').write_bytes(original)
+          index=folder/'index.html'; html=index.read_text()
+          old='<link rel="stylesheet" href="style-a.css"><link rel="stylesheet" href="style-b.css">'
+          assert old in html
+          html=html.replace(old,'<link rel="stylesheet" href="v4-original.css?v=7">',1)
+          html=html.replace('<p class="result-meta" id="resultMeta"></p><p class="device-info-line" id="resultDevice"></p>','',1)
+          html=re.sub(r'<p class="modal-note">[^<]*</p>','',html,count=1)
+          hero='https://imgaly.51shazhu.com/autoupload/zq13k/20260922/9fx4/1034X821/mmexport1790082757218.jpg'
+          assert hero in html
+          index.write_text(html)
+          script=folder/'script.js';js=script.read_text()
+          js,count=re.subn(r"\$\('#resultMeta'\)\.textContent=.*?;\$\('#resultDevice'\)\.textContent=.*?;",'',js,count=1)
+          assert count==1
+          js=js.replace("recovered?'已找回中奖记录，可点击下方按钮重新保存凭证。':'正在生成并自动下载中奖凭证…'","recovered?'已找回中奖记录，请保存凭证并联系客服核销。':'正在生成并自动下载中奖凭证…'")
+          js=js.replace("已尝试下载 PNG 凭证。请保存并联系咪呜电竞客服登记核销；如未收到文件，请点「手动保存凭证」。","已尝试自动下载凭证。请保存并联系客服核销；未收到文件可点「手动保存凭证」。")
+          js=js.replace('下载受限，请尝试手动保存，或使用系统浏览器打开后截图联系客服。','下载受限，请手动保存；微信内可改用系统浏览器。')
+          assert 'const VALID_CODES=new Set(' in js and 'async function createReceipt()' in js
+          script.write_text(js)
+          print('V4 original CSS, requested HERO and optimized PNG receipt ready')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mioo-gacha/index.html mioo-gacha/script.js mioo-gacha/v4-original.css
+          if ! git diff --cached --quiet; then
+            git commit -m 'Deploy exact Mioo V4 visuals and concise receipt dialog'
+            git push origin HEAD:main
+          fi
