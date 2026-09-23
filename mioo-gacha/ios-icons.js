@@ -7,7 +7,8 @@
     gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 9v12M3 13h18M2 9h20"/><path d="M12 9C8 9 5 8 5 5a2.5 2.5 0 0 1 5 0c1 2 2 4 2 4Zm0 0c4 0 7-1 7-4a2.5 2.5 0 0 0-5 0c-1 2-2 4-2 4Z"/>',
     ticket:'<path d="M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4V5Z"/><path d="M12 5v2m0 4v2m0 4v2"/>',
     rules:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M9 10h6M9 14h6M9 18h4"/>',
-    contact:'<path d="M20 11.5a8 8 0 1 1-3.4-6.5"/><path d="M20 4v6h-6"/><path d="M9 15a4 4 0 0 1 6 0"/><circle cx="9" cy="10" r=".7"/><circle cx="15" cy="10" r=".7"/>',
+    contact:'<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M7 13H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v-7ZM17 13h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2v-7Z"/><path d="M17 20c0 1.1-2.2 2-5 2h-1"/>',
+    music:'<path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/>',
     volume:'<path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/>',
     muted:'<path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/>',
     play:'<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/>',
@@ -87,6 +88,7 @@
     sound.classList.add('ios-icon-label');
   }
   refreshSound();
+  decorate(document.querySelector('.music-volume-icon'),'music',{clear:true});
   sound?.addEventListener('click',()=>queueMicrotask(refreshSound));
   // The original draw logic replaces button text as its state changes; keep the SVG-style lock/play glyph singular.
   const drawButton=document.querySelector('#drawBtn');
