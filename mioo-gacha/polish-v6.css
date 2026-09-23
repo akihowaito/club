@@ -491,3 +491,98 @@ footer::before{
     display:none;
   }
 }
+
+
+/* V9 — compact mobile contact card: identity left, two actions stacked on the right. */
+@media (max-width:620px){
+  #contact .contact-card{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 112px;
+    align-items:center !important;
+    gap:10px;
+    padding:13px !important;
+  }
+  #contact .contact-id{
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  #contact .contact-id img{
+    width:56px !important;
+    height:56px !important;
+    flex:0 0 56px;
+    border-radius:14px;
+  }
+  #contact .contact-id > div{
+    min-width:0;
+  }
+  #contact .contact-id strong{
+    display:block;
+    font-size:12px !important;
+    line-height:1.35;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  #contact .contact-id p{
+    margin:5px 0 0;
+    font-size:9px;
+    line-height:1.55;
+    white-space:nowrap;
+  }
+  #contact .contact-actions{
+    width:112px;
+    display:flex !important;
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+    margin:0;
+  }
+  #contact .contact-actions .btn{
+    width:100%;
+    min-width:0;
+    min-height:38px;
+    padding:0 7px;
+    border-radius:13px;
+    font-size:9px;
+    line-height:1.15;
+    flex:none !important;
+    white-space:nowrap;
+  }
+  #contact .contact-actions .ios-icon{
+    width:15px;
+    height:15px;
+    flex:none;
+  }
+}
+@media (max-width:365px){
+  #contact .contact-card{
+    grid-template-columns:minmax(0,1fr) 100px;
+    gap:7px;
+    padding:11px !important;
+  }
+  #contact .contact-id{
+    gap:8px;
+  }
+  #contact .contact-id img{
+    width:50px !important;
+    height:50px !important;
+    flex-basis:50px;
+  }
+  #contact .contact-id strong{
+    font-size:11px !important;
+  }
+  #contact .contact-id p{
+    font-size:8px;
+  }
+  #contact .contact-actions{
+    width:100px;
+    gap:6px;
+  }
+  #contact .contact-actions .btn{
+    min-height:35px;
+    font-size:8px;
+    padding:0 5px;
+  }
+}
