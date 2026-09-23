@@ -85,3 +85,34 @@
   }
   .mobile-nav a, .mobile-nav a .ios-icon { transition: none; }
 }
+
+
+/* V6.1 — fine position polish from layout review */
+@media (min-width: 621px) {
+  /* Move the hint slightly lower under the machine without changing the machine itself. */
+  .machine-hint {
+    margin-top: 12px !important;
+  }
+
+  /* Keep the receipt/download note centered within the right-side interaction column. */
+  .game-foot.ios-icon-label {
+    width: 50%;
+    margin-left: auto;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 14px;
+  }
+}
+
+/* On mobile the note stays full-width and centered. */
+@media (max-width: 620px) {
+  .game-foot.ios-icon-label {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    justify-content: center;
+    text-align: center;
+  }
+}
