@@ -116,3 +116,123 @@
     text-align: center;
   }
 }
+
+
+/* V7 — centered receipt note, animated background, hero video and compact music controls. */
+.game-foot.ios-icon-label {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ambient {
+  background:
+    radial-gradient(ellipse at 10% 12%, #ffe7ec 0, transparent 38%),
+    radial-gradient(ellipse at 95% 34%, #fff1d4 0, transparent 32%),
+    #fff8f6;
+  background-position: center;
+  background-size: cover;
+}
+html.bg-animated .ambient {
+  background-image:
+    linear-gradient(rgba(255,248,248,.70), rgba(255,249,244,.76)),
+    url("https://imgaly.51shazhu.com/autoupload/zq13k/20260922/rpSI/1920X1080/mmexport1790089005288.gif");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+html.bg-animated .ambient::after { opacity: .10; }
+
+.hero-logo-intact .hero-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 460px;
+  max-height: 315px;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: center;
+  border: 0;
+  border-radius: 16px;
+  background: #fff7f9;
+  box-shadow: 0 10px 26px rgba(190,104,133,.12);
+  filter: none;
+  animation: none;
+}
+
+.audio-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.music-volume {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.92);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(177,112,137,.06);
+}
+.music-volume .music-volume-icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: #c66486;
+  flex: none;
+}
+.music-volume .ios-icon { width: 17px; height: 17px; }
+.music-volume input[type="range"] {
+  width: 78px;
+  height: 4px;
+  accent-color: #e7809e;
+  cursor: pointer;
+}
+.volume-value {
+  min-width: 28px;
+  font-size: 9px;
+  font-weight: 900;
+  color: #a77b8d;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+#bgMusic { display: none; }
+
+@media (max-width: 850px) {
+  .music-volume input[type="range"] { width: 58px; }
+  .music-volume { padding: 0 8px; gap: 5px; }
+}
+@media (max-width: 620px) {
+  .audio-cluster { gap: 5px; }
+  .music-volume {
+    min-height: 36px;
+    border-radius: 14px;
+    padding: 0 7px;
+    gap: 4px;
+  }
+  .music-volume input[type="range"] { width: 42px; }
+  .volume-value { min-width: 24px; font-size: 8px; }
+  .music-volume .music-volume-icon { width: 15px; height: 15px; }
+  .music-volume .ios-icon { width: 14px; height: 14px; }
+  .hero-logo-intact .hero-video {
+    width: 100%;
+    max-width: 100%;
+    max-height: 175px;
+    border-radius: 9px;
+  }
+  html.bg-animated .ambient { background-position: center top; }
+}
+@media (max-width: 390px) {
+  .music-volume { padding: 0 5px; }
+  .music-volume input[type="range"] { width: 34px; }
+}
