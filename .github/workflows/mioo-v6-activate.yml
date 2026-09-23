@@ -1,0 +1,36 @@
+name: Activate Mioo V6 polish
+on:
+  push:
+    paths:
+      - .github/workflows/mioo-v6-activate.yml
+permissions:
+  contents: write
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Attach V6 CSS and JS without replacing the original design
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('mioo-gacha/index.html')
+          original = page.read_text(encoding='utf-8')
+          css = '<link rel="stylesheet" href="ios-mobile.css?v=2">'
+          js = '<script src="ios-icons.js?v=2"></script>'
+          assert original.count(css) == 1 and original.count(js) == 1
+          assert 'polish-v6.css' not in original and 'nav-v6.js' not in original
+          assert Path('mioo-gacha/polish-v6.css').is_file()
+          assert Path('mioo-gacha/nav-v6.js').is_file()
+          assert 'mmexport1790082757218.jpg' in original
+          assert 'history.js?v=1' in original
+          updated = original.replace(css, css + '\n<link rel="stylesheet" href="polish-v6.css?v=6">', 1)
+          updated = updated.replace(js, js + '\n<script src="nav-v6.js?v=6"></script>', 1)
+          page.write_text(updated, encoding='utf-8')
+          print('V6 assets attached, HERO, V4 and V5 preserved')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mioo-gacha/index.html
+          git commit -m 'Activate selected tabs and resize Mioo gacha machine'
+          git push origin HEAD:main
