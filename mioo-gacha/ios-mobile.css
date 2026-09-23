@@ -1,0 +1,99 @@
+/* iOS-inspired consistent line icons, retaining Mioo V4 colors, cards and machine. */
+.ios-icon{display:inline-block;flex:none;width:18px;height:18px;vertical-align:middle;color:inherit;stroke:currentColor}
+.ios-icon-label{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.nav a.ios-icon-label{gap:6px}
+.nav .ios-icon{width:15px;height:15px;stroke-width:1.85}
+.sound.ios-icon-label{gap:6px;white-space:nowrap}
+.sound .ios-icon{width:17px;height:17px}
+.hero-tags span.ios-icon-label{gap:5px}
+.hero-tags .ios-icon{width:14px;height:14px}
+.hero-links .ios-icon,.contact-actions .ios-icon{width:15px;height:15px}
+.ticker-inner b{display:grid;place-items:center;color:#e6a3b8}
+.ticker-inner .ios-icon{width:13px;height:13px}
+.game-topline strong.ios-icon-label{justify-content:flex-start;gap:7px}
+.game-topline strong .ios-icon{width:16px;height:16px}
+.ticket-icon .ios-icon{width:23px;height:23px;stroke-width:1.8}
+.draw-help .ios-icon{width:17px;height:17px}
+.quick-flow .flow-symbol .ios-icon{width:22px;height:22px}
+.game-foot.ios-icon-label{gap:6px;flex-wrap:wrap}
+.game-foot .ios-icon{width:15px;height:15px;color:#d27997}
+.rules-panel h3.ios-icon-label{justify-content:flex-start;gap:10px}
+.rules-panel h3 .ios-icon{width:21px;height:21px;color:#d87c99}
+.result-actions .ios-icon{width:16px;height:16px}
+.close-modal.ios-icon-label{padding:0;gap:0}
+.close-modal .ios-icon{width:21px;height:21px}
+.history-heading h3.ios-icon-label{justify-content:flex-start;gap:7px}
+.history-heading h3 .ios-icon{width:19px;height:19px}
+.history-empty-icon .ios-icon{width:30px;height:30px;stroke-width:1.65}
+.history-view.ios-icon-label{display:inline-flex;gap:5px;justify-content:center}
+.history-view .ios-icon{width:14px;height:14px}
+#saveHistoryReceipt .ios-icon,#returnFromHistory .ios-icon{width:16px;height:16px}
+.draw-action{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.draw-action:before{content:'';display:inline-block;flex:none;width:18px;height:18px;background:currentColor;mask:center/contain no-repeat url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Ccircle cx="12" cy="12" r="9" fill="none" stroke="black" stroke-width="2"/%3E%3Cpath d="m10 8 6 4-6 4V8Z" fill="black"/%3E%3C/svg%3E');-webkit-mask:center/contain no-repeat url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Ccircle cx="12" cy="12" r="9" fill="none" stroke="black" stroke-width="2"/%3E%3Cpath d="m10 8 6 4-6 4V8Z" fill="black"/%3E%3C/svg%3E')}
+.draw-action:disabled:before{mask-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Crect x="5" y="10" width="14" height="11" rx="2" fill="black"/%3E%3Cpath d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="black" stroke-width="2"/%3E%3C/svg%3E');-webkit-mask-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Crect x="5" y="10" width="14" height="11" rx="2" fill="black"/%3E%3Cpath d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="black" stroke-width="2"/%3E%3C/svg%3E')}
+/* Responsive layout: prize icons and reward cards are intentionally unchanged. */
+@media(max-width:620px){
+ .game-card{padding:16px 13px 18px;overflow:hidden}
+ .game-topline{margin:0 3px 12px;align-items:flex-start}
+ .game-topline strong{font-size:10px;letter-spacing:.4px}
+ .game-topline span{font-size:9px;text-align:right;max-width:120px;line-height:1.4}
+ .game-grid{display:flex!important;flex-direction:column;align-items:stretch;gap:14px;width:100%}
+ .machine-stage{order:0;width:100%!important;min-width:0;max-width:100%;padding:17px 6px 13px;overflow:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 49%,#fff0f2 0,#fff7f5 65%,#fffaf8 100%)}
+ .machine-stage::before{inset:13px 5px;opacity:.19}
+ .machine-state{width:auto;min-width:160px;max-width:94%;padding:7px 16px;font-size:11px;min-height:31px;line-height:1.35}
+ .machine-frame,.machine-stage .machine-frame{width:292px!important;height:455px!important;max-width:100%;margin:7px auto 2px;flex:none}
+ .machine-stage .machine{transform-origin:top left;transform:scale(.87);animation:iosMachineIdle 4.5s ease-in-out infinite}
+ .machine-stage.ready .machine{animation:iosMachineReady 1.65s ease-in-out infinite}
+ .machine-stage.drawing .machine{animation:iosMachineShake .12s ease-in-out infinite alternate}
+ .machine-stage.dispensing .machine{animation:iosMachineCelebrate .72s ease-out both}
+ .machine-stage .machine-hint{font-size:10px;max-width:95%;line-height:1.45;margin-top:6px}
+ .redeem-panel{order:1;width:100%!important;margin:0;padding:18px 16px 17px;border-radius:19px;box-shadow:0 6px 17px #deaeb529}
+ .redeem-title{flex-wrap:nowrap;gap:9px;margin-bottom:7px}
+ .redeem-title h3{font-size:19px;line-height:1.4}
+ .ticket-icon{width:38px;height:38px;border-radius:12px}
+ .redeem-sub{font-size:11px;line-height:1.6;margin:0 0 15px 47px}
+ .flow-steps{display:flex;flex-wrap:nowrap;gap:4px;justify-content:space-between;margin:0 0 17px}
+ .flow-step{font-size:10px;gap:5px;white-space:nowrap}
+ .flow-step b{width:22px;height:22px;font-size:10px}
+ .flow-dot{font-size:13px}
+ .field-label{font-size:11px;margin-bottom:8px}
+ .ticket-entry{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:8px;align-items:stretch}
+ .ticket-entry input{height:45px;min-width:0;width:100%;font-size:12px;padding:0 11px;border-radius:12px}
+ .ticket-entry .btn{min-height:45px;width:100%;font-size:11px;padding:0 6px;border-radius:12px}
+ .status{min-height:34px;margin:9px 0 7px;font-size:11px}
+ .draw-action{min-height:54px;font-size:15px;border-radius:14px}
+ .draw-help{margin-top:12px;padding:11px;font-size:10px;line-height:1.6}
+ .game-foot{padding-top:17px;font-size:10px}
+ .quick-flow .flow-symbol{width:30px;height:30px}
+ .quick-flow .flow-symbol .ios-icon{width:19px;height:19px}
+ .quick-flow strong{font-size:10px}
+ .quick-flow small{font-size:9px}
+ .mobile-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:50px;color:#9c7a8b;font-size:10px;line-height:1.1}
+ .mobile-nav a .ios-icon{width:21px;height:21px;color:#cf7796;stroke-width:1.75}
+ .mobile-nav{padding:9px 9px calc(8px + env(safe-area-inset-bottom));gap:4px}
+ .sound .ios-icon{width:16px;height:16px}
+ .history-heading h3{font-size:17px}
+ .history-panel{padding:16px}
+}
+@media(max-width:365px){
+ .machine-frame,.machine-stage .machine-frame{width:238px!important;height:371px!important}
+ .machine-stage .machine{transform:scale(.71);animation:iosMachineIdleSmall 4.5s ease-in-out infinite}
+ .machine-stage.ready .machine{animation:iosMachineReadySmall 1.65s ease-in-out infinite}
+ .machine-stage.drawing .machine{animation:iosMachineShakeSmall .12s ease-in-out infinite alternate}
+ .machine-stage.dispensing .machine{animation:iosMachineCelebrateSmall .72s ease-out both}
+ .redeem-panel{padding:15px 11px}
+ .ticket-entry{grid-template-columns:1fr}
+ .ticket-entry .btn{min-height:42px}
+ .redeem-title h3{font-size:17px}
+ .flow-step{font-size:9px;gap:3px}
+ .flow-step b{width:19px;height:19px}
+}
+@keyframes iosMachineIdle{0%,100%{transform:scale(.87) translateY(0) rotate(-.7deg)}50%{transform:scale(.87) translateY(-7px) rotate(.8deg)}}
+@keyframes iosMachineReady{0%,100%{transform:scale(.87) translateY(0) rotate(-1deg)}50%{transform:scale(.87) translateY(-10px) rotate(1deg)}}
+@keyframes iosMachineShake{from{transform:scale(.87) rotate(-2deg) translateX(-3px)}to{transform:scale(.87) rotate(2deg) translateX(3px)}}
+@keyframes iosMachineCelebrate{0%{transform:scale(.87) translateY(0)}35%{transform:scale(.87) translateY(-14px) rotate(-2deg)}65%{transform:scale(.87) translateY(-7px) rotate(2deg)}100%{transform:scale(.87)}}
+@keyframes iosMachineIdleSmall{0%,100%{transform:scale(.71) translateY(0) rotate(-.7deg)}50%{transform:scale(.71) translateY(-7px) rotate(.8deg)}}
+@keyframes iosMachineReadySmall{0%,100%{transform:scale(.71) rotate(-1deg)}50%{transform:scale(.71) translateY(-10px) rotate(1deg)}}
+@keyframes iosMachineShakeSmall{from{transform:scale(.71) rotate(-2deg) translateX(-3px)}to{transform:scale(.71) rotate(2deg) translateX(3px)}}
+@keyframes iosMachineCelebrateSmall{0%{transform:scale(.71)}35%{transform:scale(.71) translateY(-14px) rotate(-2deg)}65%{transform:scale(.71) translateY(-7px) rotate(2deg)}100%{transform:scale(.71)}}
+@media(prefers-reduced-motion:reduce){.machine-stage .machine,.machine-stage.ready .machine,.machine-stage.drawing .machine,.machine-stage.dispensing .machine{animation:none!important}}
