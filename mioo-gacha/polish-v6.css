@@ -1,0 +1,87 @@
+/* V6: selected bottom navigation, restrained capsule size, right-aligned receipt note. */
+.game-foot.ios-icon-label {
+  width: 100%;
+  justify-content: flex-end;
+  text-align: right;
+  gap: 6px;
+  line-height: 1.55;
+}
+.game-foot .ios-icon { flex-shrink: 0; }
+.game-foot a { white-space: nowrap; }
+
+/* Keep the entire original machine illustration and all four animation states. */
+.machine-stage .machine-frame { width: 313px; height: 488px; }
+.machine-stage .machine {
+  --mioo-machine-scale: .934;
+  transform-origin: top left;
+  transform: scale(var(--mioo-machine-scale));
+  animation: miooIdleV6 4.5s ease-in-out infinite;
+}
+.machine-stage.ready .machine { animation: miooReadyV6 1.65s ease-in-out infinite; }
+.machine-stage.drawing .machine { animation: miooShakeV6 .12s ease-in-out infinite alternate; }
+.machine-stage.dispensing .machine { animation: miooCelebrateV6 .72s ease-out both; }
+@keyframes miooIdleV6 {
+  0%,100% { transform: scale(var(--mioo-machine-scale)) translateY(0) rotate(-.7deg); }
+  50% { transform: scale(var(--mioo-machine-scale)) translateY(-7px) rotate(.8deg); }
+}
+@keyframes miooReadyV6 {
+  0%,100% { transform: scale(var(--mioo-machine-scale)) translateY(0) rotate(-1deg); }
+  50% { transform: scale(var(--mioo-machine-scale)) translateY(-10px) rotate(1deg); }
+}
+@keyframes miooShakeV6 {
+  from { transform: scale(var(--mioo-machine-scale)) rotate(-2deg) translateX(-3px); }
+  to { transform: scale(var(--mioo-machine-scale)) rotate(2deg) translateX(3px); }
+}
+@keyframes miooCelebrateV6 {
+  0% { transform: scale(var(--mioo-machine-scale)); }
+  35% { transform: scale(var(--mioo-machine-scale)) translateY(-14px) rotate(-2deg); }
+  65% { transform: scale(var(--mioo-machine-scale)) translateY(-7px) rotate(2deg); }
+  100% { transform: scale(var(--mioo-machine-scale)); }
+}
+@media (max-width: 850px) {
+  .machine-stage .machine-frame { width: 246px; height: 383px; }
+  .machine-stage .machine { --mioo-machine-scale: .734; }
+}
+@media (max-width: 620px) {
+  .machine-stage .machine-frame { width: 265px !important; height: 413px !important; }
+  .machine-stage .machine { --mioo-machine-scale: .791; }
+  .machine-stage { padding-top: 12px; padding-bottom: 11px; }
+  .game-foot.ios-icon-label { justify-content: flex-end; font-size: 10px; padding: 14px 3px 0; }
+  .mobile-nav { align-items: stretch; }
+  .mobile-nav a {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 3px 7px;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .18s ease, box-shadow .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav a .ios-icon { transition: color .2s ease, transform .2s ease; }
+  .mobile-nav a.is-active,
+  .mobile-nav a[aria-current="page"] {
+    background: linear-gradient(145deg, #ffe2eb, #fff1e9);
+    color: #bf517b;
+    border-color: #f5c4d4;
+    box-shadow: 0 2px 6px #dc8dab27, inset 0 1px 0 #fff;
+  }
+  .mobile-nav a.is-active .ios-icon,
+  .mobile-nav a[aria-current="page"] .ios-icon { color: #be547e; transform: translateY(-1px); stroke-width: 2; }
+  .mobile-nav a:active { transform: scale(.94); background: #ffe2eb; }
+  .mobile-nav a:focus-visible { outline: 2px solid #bf517b; outline-offset: -2px; }
+}
+@media (max-width: 365px) {
+  .machine-stage .machine-frame { width: 217px !important; height: 338px !important; }
+  .machine-stage .machine { --mioo-machine-scale: .648; }
+  .game-foot.ios-icon-label { font-size: 9px; }
+  .mobile-nav a { padding: 7px 1px 6px; border-radius: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .machine-stage .machine, .machine-stage.ready .machine,
+  .machine-stage.drawing .machine, .machine-stage.dispensing .machine {
+    animation: none !important;
+    transform: scale(var(--mioo-machine-scale));
+  }
+  .mobile-nav a, .mobile-nav a .ios-icon { transition: none; }
+}
