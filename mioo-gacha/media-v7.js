@@ -76,11 +76,22 @@
   });
 
   const startBackground = () => {
-    if ('requestIdleCallback' in window) requestIdleCallback(enableAnimatedBackground, { timeout: 1200 });
-    else setTimeout(enableAnimatedBackground, 450);
+    if (bgLoaded) return;
+    if ('requestIdleCallback' in window) requestIdleCallback(enableAnimatedBackground, { timeout: 1800 });
+    else setTimeout(enableAnimatedBackground, 900);
   };
-  if (document.readyState === 'complete') startBackground();
-  else window.addEventListener('load', startBackground, { once:true });
+  // Prioritize the HERO MP4 first. The animated GIF background starts after the video
+  // can play, or after a delayed fallback if the browser/network is slow.
+  if (heroVideo) {
+    heroVideo.addEventListener('canplay', () => setTimeout(startBackground, 700), { once:true });
+    heroVideo.load();
+    heroVideo.play().catch(() => {});
+    setTimeout(startBackground, 4500);
+  } else if (document.readyState === 'complete') {
+    startBackground();
+  } else {
+    window.addEventListener('load', startBackground, { once:true });
+  }
 
   tryPlayMusic();
 
