@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-24 -24 328 328" width="280" height="280">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="50" y1="40" x2="230" y2="240">
+      <stop offset="0" stop-color="#ffc4e4"/>
+      <stop offset=".5" stop-color="#c9a8ff"/>
+      <stop offset="1" stop-color="#86d0ff"/>
+    </linearGradient>
+    <radialGradient id="s" cx=".38" cy=".32" r=".75">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".45" stop-color="#ffd8ee"/>
+      <stop offset="1" stop-color="#b48cff"/>
+    </radialGradient>
+    <filter id="sh" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#2a1650" flood-opacity=".5"/>
+    </filter>
+    <filter id="gl" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <path id="arc" d="M177.19 60.24 A88 88 0 0 1 190.47 212.08"/>
+    <path id="head" d="M160.99 232.74 L210.97 234.35 L176.53 185.21 Z"/>
+    <g id="arrow">
+      <use xlink:href="#arc" href="#arc" fill="none" stroke-width="32" stroke-linecap="round"/>
+      <use xlink:href="#head" href="#head" stroke-width="12" stroke-linejoin="round"/>
+    </g>
+    <path id="star" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+  </defs>
+
+  <g filter="url(#sh)">
+    <!-- extrusion -->
+    <g fill="#7a58d6" stroke="#7a58d6" transform="translate(0 8)">
+      <use xlink:href="#arrow" href="#arrow"/>
+      <use xlink:href="#arrow" href="#arrow" transform="rotate(180 140 140)"/>
+    </g>
+    <!-- face -->
+    <g fill="url(#g)" stroke="url(#g)">
+      <use xlink:href="#arrow" href="#arrow"/>
+      <use xlink:href="#arrow" href="#arrow" transform="rotate(180 140 140)"/>
+    </g>
+    <!-- gloss -->
+    <g fill="none" stroke="#fff" stroke-linecap="round">
+      <path d="M187 58.59 A94 94 0 0 1 232.57 123.68" stroke-width="7" stroke-opacity=".85"/>
+      <path d="M46 140 A94 94 0 0 1 79.58 67.99" stroke-width="7" stroke-opacity=".85"/>
+      <path d="M188 76 A74 74 0 0 1 206 100" stroke-width="4" stroke-opacity=".5"/>
+    </g>
+
+    <!-- core sparkle -->
+    <use xlink:href="#star" href="#star" fill="#8b63e0" transform="translate(140 146) scale(46)"/>
+    <use xlink:href="#star" href="#star" fill="url(#s)" stroke="#fff" stroke-opacity=".7" stroke-width=".03" transform="translate(140 140) scale(46)"/>
+    <ellipse cx="128" cy="124" rx="7" ry="4" fill="#fff" opacity=".9" transform="rotate(-35 128 124)"/>
+  </g>
+
+  <!-- glints -->
+  <g fill="#fff">
+    <use xlink:href="#star" href="#star" transform="translate(230 50) scale(16)" filter="url(#gl)" opacity=".9"/>
+    <use xlink:href="#star" href="#star" transform="translate(230 50) scale(13)"/>
+    <use xlink:href="#star" href="#star" transform="translate(46 226) scale(10)"/>
+    <use xlink:href="#star" href="#star" transform="translate(246 206) scale(6)" opacity=".8"/>
+  </g>
+</svg>
