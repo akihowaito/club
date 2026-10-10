@@ -1,10 +1,11 @@
-const CACHE = 'mioo-pocket-v142';
+const CACHE = 'mioo-pocket-v150';
 self.addEventListener('activate', event => event.waitUntil((async () => {
   for (const key of await caches.keys()) if (key.startsWith('mioo-pocket-') && key !== CACHE) await caches.delete(key);
   await self.clients.claim();
 })()));
 self.addEventListener('fetch', event => {
   const request = event.request, url = new URL(request.url);
+  if (url.pathname.startsWith('/api/community')) return;
   if (request.method !== 'GET' || url.origin !== location.origin || !url.pathname.startsWith(new URL(self.registration.scope).pathname)) return;
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).then(async response => {
