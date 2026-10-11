@@ -1,0 +1,9 @@
+{
+  "name": "灰灰电竞三角洲俱乐部菜单",
+  "short_name": "灰灰电竞",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f8",
+  "theme_color": "#f7f7f8",
+  "icons": []
+}

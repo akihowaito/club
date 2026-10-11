@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f7f8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="灰灰电竞 · 三角洲俱乐部菜单">
+  <title>灰灰电竞 · 三角洲俱乐部菜单</title>
+  <link rel="icon" type="image/webp" href="assets/brand/huihui-mark.webp">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="spark spark-a">✦</span>
+    <span class="spark spark-b">✦</span>
+  </div>
+
+  <header class="appbar">
+    <div class="shell appbar-inner">
+      <a class="app-brand" href="index.html#home" aria-label="灰灰电竞首页">
+        <span class="brand-image"><img src="assets/brand/huihui-mark.webp" alt=""></span>
+        <span>灰灰电竞</span>
+      </a>
+      <div class="app-title">三角洲俱乐部菜单</div>
+      <div class="appbar-spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main id="mainView">
+    <section class="hero gs-reveal" id="home">
+      <div class="shell">
+        <article class="store-card">
+          <span class="hero-glow hero-glow-a" aria-hidden="true"></span>
+          <span class="hero-glow hero-glow-b" aria-hidden="true"></span>
+          <div class="store-head">
+            <div class="store-avatar logo-avatar">
+              <img src="assets/brand/huihui-mark.webp" alt="灰灰电竞">
+            </div>
+            <div class="store-title">
+              <h1>灰灰电竞</h1>
+              <p>DELTA FORCE · 三角洲俱乐部菜单</p>
+            </div>
+            <span class="open-tag"><i></i>营业中</span>
+          </div>
+          <div class="store-actions">
+            <button class="primary-btn ui-press" type="button" data-jump="#menu">
+              <span class="btn-icon">🎮</span> 查看菜单
+            </button>
+            <button class="soft-btn ui-press cart-open" type="button" data-open-cart>
+              <span class="btn-icon">🗂️</span> 菜单夹 <span class="cart-count hero-cart-count">0</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="quick gs-reveal" aria-label="快捷导航">
+      <div class="shell">
+        <div class="quick-grid">
+          <button class="quick-item ui-press" type="button" data-filter="推荐">
+            <span class="quick-icon">🔥</span><span>热门推荐</span>
+          </button>
+          <a class="quick-item ui-press" href="mobile.html">
+            <span class="quick-icon">🎮</span><span>手游专区</span>
+          </a>
+          <a class="quick-item ui-press" href="recharge.html">
+            <span class="quick-icon">💎</span><span>充值权益</span>
+          </a>
+          <a class="quick-item ui-press" href="notice.html">
+            <span class="quick-icon">📋</span><span>下单须知</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu" id="menu">
+      <div class="shell">
+        <header class="section-head">
+          <div><span class="section-kicker">HUIHUI CLUB</span><h1>菜单中心</h1><p>点击海报查看完整玩法 · 喜欢的可加入菜单夹</p></div>
+          <span class="result-count"><b id="resultCount">29</b> 个菜单</span>
+        </header>
+        <div class="search-wrap">
+          <div class="search-row">
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span class="sr-only">搜索菜单</span>
+              <input id="searchInput" type="search" placeholder="搜索：大侦探、黄金矿工、加班…" autocomplete="off">
+              <span class="search-focus-glow" aria-hidden="true"></span>
+            </label>
+            <button class="search-action ui-press" id="searchAction" type="button">搜索</button>
+          </div>
+          <nav class="category-scroller" id="categoryBar" aria-label="菜单分类">
+            <button class="category-chip" type="button" data-cat="体验">体验</button>
+            <button class="category-chip" type="button" data-cat="陪玩">陪玩</button>
+            <button class="category-chip" type="button" data-cat="推荐">推荐</button>
+            <button class="category-chip" type="button" data-cat="趣味">趣味</button>
+            <button class="category-chip" type="button" data-cat="活动">活动</button>
+            <button class="category-chip" type="button" data-cat="3x3">3x3</button>
+          </nav>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+        <div class="empty" id="emptyState" hidden><b>没有找到对应菜单</b><p>换个关键词或分类再试试。</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar" aria-label="手机底部导航">
+    <button class="tab-item active" type="button" data-jump="#home" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3Z"/></svg><span>首页</span>
+    </button>
+    <button class="tab-item" type="button" data-jump="#menu">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>菜单</span>
+    </button>
+    <a class="tab-item" href="collection.html">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="7" cy="6" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="17" cy="18" r="1"/></svg><span>合集</span>
+    </a>
+    <button class="tab-item cart-tab" type="button" data-open-cart>
+      <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 7V4h8v3"/></svg><span>菜单夹</span><i class="tab-cart-count">0</i>
+    </button>
+    <a class="tab-item" href="notice.html">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>须知</span>
+    </a>
+  </nav>
+
+  <!-- Product detail -->
+  <dialog class="product-sheet" id="productSheet">
+    <div class="sheet-head">
+      <button class="sheet-grabber" type="button" data-close-sheet aria-label="关闭菜单详情"><span></span></button>
+      <div class="sheet-head-copy"><b id="sheetTitle">菜单</b></div>
+      <span class="sheet-favorite-mark" aria-hidden="true">✦</span>
+    </div>
+      <div class="sheet-body" id="sheetBody">
+        <div class="image-viewport" id="imageViewport" aria-label="海报查看器：双指缩放，放大后可拖动查看细节">
+          <div class="original-loader" id="originalLoader" role="status" aria-live="polite" hidden><span aria-hidden="true"></span><b>原图加载中…</b></div>
+          <img id="sheetImage" alt="">
+      </div>
+      <div class="sheet-placeholder" id="sheetPlaceholder" hidden>
+        <img src="assets/brand/huihui-mark.webp" alt="">
+        <span>HUIHUI CLUB</span>
+        <b id="placeholderTitle">菜单海报</b>
+        <p>海报待补充</p>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="add-cart-btn ui-press" type="button" id="addCurrentToCart">加入菜单夹</button>
+    </div>
+  </dialog>
+
+  <!-- Cart -->
+  <dialog class="cart-sheet" id="cartSheet">
+    <div class="cart-head">
+      <div><span class="section-kicker">MENU FOLDER</span><h2>我的菜单夹</h2></div>
+      <button class="sheet-grabber" type="button" data-close-cart aria-label="关闭菜单夹"><span></span></button>
+    </div>
+    <div class="cart-summary">
+      <span>已选 <b id="cartSummaryCount">0</b> 个玩法</span>
+      <button class="clear-cart ui-press" id="clearCart" type="button">清空</button>
+    </div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-empty" id="cartEmpty">
+      <div class="empty-folder">🗂️</div>
+      <b>菜单夹还是空的</b>
+      <p>看到喜欢的玩法，点进海报加入这里。</p>
+      <button class="soft-btn ui-press" type="button" data-cart-jump>去逛菜单</button>
+    </div>
+    <div class="cart-foot">
+      <button class="copy-cart ui-press" id="copyCart" type="button">复制菜单清单</button>
+      <a class="contact-cart ui-press" href="notice.html">查看下单须知</a>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span>✓</span><b>已加入菜单夹</b></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

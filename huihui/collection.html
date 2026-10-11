@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f7f8">
+  <meta name="description" content="灰灰电竞 · 菜单合集">
+  <title>菜单合集 · 灰灰电竞</title>
+  <link rel="icon" type="image/webp" href="assets/brand/huihui-mark.webp">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="route-page" data-active-nav="collection">
+  <div class="ambient-bg" aria-hidden="true"><span class="orb orb-a"></span><span class="orb orb-b"></span></div>
+  <header class="appbar">
+    <div class="shell appbar-inner">
+      <a class="app-brand" href="index.html#home" aria-label="灰灰电竞首页"><span class="brand-image"><img src="assets/brand/huihui-mark.webp" alt=""></span><span>灰灰电竞</span></a>
+      <div class="app-title">三角洲俱乐部菜单</div><div class="appbar-spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+  <main class="route-main collection-route">
+    <header class="subpage-head standalone-head">
+      <button class="subpage-back ui-press" type="button" data-history-back aria-label="返回上一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div><small>MENU DIRECTORY</small><h1 id="collectionTitle">热门推荐</h1></div><span></span>
+    </header>
+    <div class="subpage-body collection-body">
+      <div class="collection-directory">
+        <nav class="collection-category-rail" id="collectionCategoryRail" aria-label="菜单目录分类">
+          <button class="collection-category active" type="button" data-collection="推荐">热门推荐</button>
+          <button class="collection-category" type="button" data-collection="体验">体验玩法</button>
+          <button class="collection-category" type="button" data-collection="代肝">代肝专区</button>
+          <button class="collection-category" type="button" data-collection="陪玩">陪玩服务</button>
+          <button class="collection-category" type="button" data-collection="趣味">趣味玩法</button>
+          <button class="collection-category" type="button" data-collection="活动">活动专区</button>
+          <button class="collection-category" type="button" data-collection="3x3">3×3 服务</button>
+        </nav>
+        <div class="collection-menu-list" id="collectionGrid" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+  <script src="page-shell.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
