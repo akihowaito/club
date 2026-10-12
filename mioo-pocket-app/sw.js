@@ -1,4 +1,4 @@
-const CACHE = 'mioo-pocket-v175';
+const CACHE = 'mioo-pocket-v176';
 self.addEventListener('activate', event => event.waitUntil((async () => {
   for (const key of await caches.keys()) if (key.startsWith('mioo-pocket-') && key !== CACHE) await caches.delete(key);
   await self.clients.claim();
