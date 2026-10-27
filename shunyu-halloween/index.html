@@ -8,7 +8,7 @@
   <title>今夜，来点捣蛋的。｜顺宇电竞万圣节</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ff8a38' d='M29 17C7 9 0 47 20 54q12 7 24 0C65 48 59 9 35 17l3-12-10 2z'/%3E%3Cpath fill='%23282035' d='m15 34 8-9 5 11zm22 2 5-11 8 9zM19 41q13 9 26 0-4 16-13 9-9 7-13-9'/%3E%3C/svg%3E">
   <link rel="preload" href="assets/ZCOOLKuaiLe-Regular.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="style.css?v=70-additive-2">
+  <link rel="stylesheet" href="style.css?v=full-page-effects-1">
 </head>
 <body>
   <a class="skip" href="#pumpkin-world">跳到南瓜秘境</a>
@@ -106,9 +106,10 @@
   <dialog id="host-dialog" class="themed-dialog host-dialog" aria-labelledby="host-title"><form id="host-form"><div class="dialog-header"><h2 id="host-title">今晚的捣蛋，由你安排。</h2><button type="button" class="icon-button close-dialog" aria-label="关闭开局设置"><svg><use href="#i-close"/></svg></button></div><p class="dialog-description">选择要藏的南瓜，封存后交给玩家寻找。</p><div class="host-controls"><label>活动档位<select id="host-tier"><option value="688">688 · 35 盏灯 · 1 只鬼</option><option value="1288">1288 · 70 盏灯 · 2 只鬼</option></select></label><label>本轮寻找次数<input type="number" id="host-chances" min="1" max="99999" value="5" step="1" inputmode="numeric" required></label></div><div class="host-grid-label"><strong>藏在哪里？<span id="host-selection-count">0 / 1</span></strong><button class="text-button" type="button" id="host-random">帮我随机藏</button></div><div class="host-grid" id="host-grid" aria-label="选择藏鬼位置"></div><p class="host-warning">本地当面开局模式，位置保存在当前设备；正式线上活动需接入服务端验证。</p><p id="host-error" class="form-error" role="alert"></p><button type="submit" class="button primary full-width">封存南瓜，开始寻找<svg><use href="#i-arrow"/></svg></button></form></dialog>
   <dialog id="result-dialog" class="themed-dialog result-dialog" aria-labelledby="result-title"><button class="icon-button close-dialog result-close" aria-label="关闭结果"><svg><use href="#i-close"/></svg></button><div class="result-art"><svg><use href="#i-ghost"/></svg><svg class="result-star star-left"><use href="#i-star"/></svg><svg class="result-star star-right"><use href="#i-star"/></svg></div><span class="result-label" id="result-label">CAUGHT YOU!</span><h2 id="result-title">抓到你啦，捣蛋鬼！</h2><p id="result-description"></p><div class="result-actions"><button class="button primary full-width" id="result-action">收下这份好运<svg><use href="#i-star"/></svg></button><button class="text-button" id="copy-result">复制本轮结果</button></div><p class="result-footnote">本地互动记录，实际结单请由老板确认。</p></dialog>
   <dialog id="confirm-dialog" class="themed-dialog confirm-dialog" aria-labelledby="confirm-title"><h2 id="confirm-title">开启新的捣蛋夜？</h2><p id="confirm-description">本轮已点亮的南瓜和寻找进度会重置。</p><div><button class="button secondary" id="confirm-cancel">保留本轮</button><button class="button primary" id="confirm-ok">开始新一轮</button></div></dialog>
-  <script src="app.js?v=70-additive-2"></script>
+  <script src="app.js?v=full-page-effects-1"></script>
 </body>
 </html>
+
 
 
 

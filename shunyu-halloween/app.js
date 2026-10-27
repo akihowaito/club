@@ -250,7 +250,52 @@
   }
   addEventListener('resize', resizeCanvas, {passive:true});
   addEventListener('scroll', updateSceneBounds, {passive:true});
-  $('.hero').addEventListener('pointermove', event => { const now=performance.now(); if (calm || event.pointerType !== 'mouse' || now-lastTrail<70 || particles.length>160) return; lastTrail=now; burst(event.clientX,event.clientY,2,true); });
+  const cursorAura = document.createElement('span'); cursorAura.className = 'cursor-aura'; cursorAura.setAttribute('aria-hidden','true'); document.body.append(cursorAura);
+  const pressTargets = 'a,button,input,select,summary,.rule-list>div,.main-rule,.little-note,.closing,.section-heading';
+  let pressedTarget = null, pointerFrame = false, latestPointer;
+  function effectSurface(target) { return target.closest('dialog[open]') || document.body; }
+  function placeEffect(element, surface, x, y) {
+    const inDialog = surface !== document.body, box = inDialog ? surface.getBoundingClientRect() : null;
+    if (element.parentElement !== surface) surface.append(element);
+    element.classList.toggle('in-dialog', inDialog);
+    element.style.left = `${inDialog ? x - box.left + surface.scrollLeft - surface.clientLeft : x}px`;
+    element.style.top = `${inDialog ? y - box.top + surface.scrollTop - surface.clientTop : y}px`;
+  }
+  function magicMark(surface, x, y, hover = false) {
+    if (calm) return;
+    const active = $$('.tap-magic,.hover-spark'); if (active.length >= 16) active[0].remove();
+    const mark = document.createElement('span'); mark.className = hover ? 'hover-spark' : 'tap-magic'; mark.setAttribute('aria-hidden','true');
+    mark.innerHTML = '<svg viewBox="0 0 24 24"><use href="#i-star"/></svg>';
+    placeEffect(mark, surface, x, y); setTimeout(() => mark.remove(), hover ? 650 : 800);
+  }
+  function releasePress() { pressedTarget?.classList.remove('is-pressed'); pressedTarget = null; }
+  document.addEventListener('pointermove', event => {
+    if (calm || event.pointerType !== 'mouse') return;
+    latestPointer = {x:event.clientX,y:event.clientY,target:event.target}; if (pointerFrame) return; pointerFrame = true;
+    requestAnimationFrame(() => {
+      pointerFrame = false; if (calm || !latestPointer?.target.isConnected) return;
+      const {x,y,target} = latestPointer, surface = effectSurface(target), now = performance.now();
+      placeEffect(cursorAura,surface,x,y); cursorAura.classList.add('is-visible');
+      if (now-lastTrail<90 || particles.length>160) return; lastTrail = now;
+      if (surface === document.body) burst(x,y,2,true); else magicMark(surface,x,y,true);
+    });
+  }, {passive:true});
+  document.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0 || event.target.closest(':disabled,[aria-disabled="true"]')) return;
+    releasePress(); pressedTarget = event.target.closest(pressTargets); pressedTarget?.classList.add('is-pressed');
+    const surface = effectSurface(event.target); magicMark(surface,event.clientX,event.clientY);
+    if (surface === document.body && !event.target.closest('.pumpkin,.hero-ghost,#ghost-whisper')) burst(event.clientX,event.clientY,12,true);
+  }, {capture:true,passive:true});
+  document.addEventListener('pointerup', releasePress, {capture:true,passive:true});
+  document.addEventListener('pointercancel', releasePress, {capture:true,passive:true});
+  document.addEventListener('click', event => {
+    if (event.detail !== 0 || !event.target.closest('a,button,summary') || event.target.closest(':disabled,[aria-disabled="true"]')) return;
+    const control = event.target.closest('a,button,summary'), box = control.getBoundingClientRect();
+    magicMark(effectSurface(control),box.left+box.width/2,box.top+box.height/2);
+  }, {capture:true,passive:true});
+  document.documentElement.addEventListener('pointerleave', () => { cursorAura.classList.remove('is-visible'); releasePress(); });
+  document.addEventListener('scroll', () => cursorAura.classList.remove('is-visible'), {capture:true,passive:true});
+  addEventListener('blur', () => { cursorAura.classList.remove('is-visible'); releasePress(); });
   new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.target.classList.contains('hero')) $('.mobile-game-bar').classList.toggle('visible', !entry.isIntersecting); }); }, {threshold:.05}).observe($('.hero'));
   render(); updateCalculation(); resizeCanvas(); setMotion(!calm); requestAnimationFrame(animate); save();
 })();

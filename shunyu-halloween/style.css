@@ -66,6 +66,52 @@
 .host-grid{max-height:min(42dvh,360px);overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 3px 2px;scrollbar-width:thin}
 .host-pumpkin{min-width:0;min-height:44px}
 
+/* Shared page feedback; local marks also render inside native modal dialogs. */
+.cursor-aura,.tap-magic,.hover-spark{position:fixed;pointer-events:none!important;z-index:150;user-select:none}
+.cursor-aura.in-dialog,.tap-magic.in-dialog,.hover-spark.in-dialog{position:absolute;z-index:15}
+.cursor-aura{width:190px;height:190px;margin:-95px 0 0 -95px;border-radius:50%;background:radial-gradient(circle,#ffc48516 0,#b793d610 28%,transparent 66%);mix-blend-mode:screen;opacity:0;transition:opacity .25s;contain:strict}
+.cursor-aura.is-visible{opacity:1}
+.tap-magic{width:84px;height:84px;margin:-42px 0 0 -42px}
+.tap-magic:before{content:'';position:absolute;inset:0;border:1.5px solid #ffb977;border-radius:50%;animation:page-ripple .72s var(--ease) both}
+.tap-magic:after{content:'';position:absolute;inset:14px;border:1px solid #d5bbef;border-radius:50%;animation:page-ripple .6s .07s var(--ease) both}
+.tap-magic svg{position:absolute;left:50%;top:50%;width:23px;height:23px;fill:#ffe5ad;animation:page-spark .68s var(--ease) both}
+.hover-spark{width:9px;height:9px;margin:-4px 0 0 -4px;color:#e9c7a1;animation:page-hover-spark .6s ease-out both}
+.hover-spark svg{width:100%;height:100%;fill:currentColor}
+.button,.icon-button,.tier-option,.host-pumpkin,.text-button,.rule-link,.site-header nav a,.site-footer a,.brand,.chance-details summary{transition:transform .22s var(--ease),scale .14s,filter .2s,background-color .2s,border-color .2s,box-shadow .2s,color .2s}
+.button.is-pressed,.icon-button.is-pressed,.tier-option.is-pressed,.host-pumpkin.is-pressed,.text-button.is-pressed,.rule-link.is-pressed,.brand.is-pressed,.site-header nav a.is-pressed,.site-footer a.is-pressed{scale:.97;filter:brightness(1.12)}
+summary.is-pressed{background-color:#44334d66;filter:brightness(1.1)}
+.rule-list>div,.main-rule,.little-note,.closing,.section-heading{transition:translate .25s var(--ease),background-color .25s,filter .2s}
+.rule-list>div.is-pressed,.main-rule.is-pressed,.little-note.is-pressed,.closing.is-pressed,.section-heading.is-pressed{filter:brightness(1.16)}
+.brand-ghost,.closing>svg,.little-note>svg{transition:transform .3s var(--ease),filter .25s}
+.site-header nav a,.site-footer a,.text-button,.rule-link{background-image:linear-gradient(var(--orange),var(--orange));background-repeat:no-repeat;background-position:left bottom;background-size:0 1px;transition:background-size .25s,color .2s,scale .14s,filter .2s}
+input,select{transition:border-color .2s,background-color .2s,box-shadow .2s}
+input:focus,select:focus{border-color:var(--orange);background-color:#2a2034;box-shadow:0 3px 12px #100a202b}
+.themed-dialog:focus-within{border-color:#a483bb}
+.hero h1,.section-heading h2,.rules-title h2,h3,.hero-description,.rules-title>p,.section-heading p,.main-rule p,.rule-list p,.local-caption,.site-footer>span{transition:color .2s,text-shadow .25s}
+@media(hover:hover) and (pointer:fine){
+  .brand:hover{color:var(--orange)}.brand:hover .brand-ghost{transform:translateY(-3px) rotate(-17deg) scale(1.08);filter:brightness(1.15)}
+  .site-header nav a:hover,.site-footer a:hover,.text-button:hover,.rule-link:hover{background-size:100% 1px;color:var(--orange-bright)}
+  .button:hover{filter:brightness(1.07)}.button:hover svg,.text-button:hover svg{translate:3px 0;transition:translate .2s}
+  .icon-button:hover{color:var(--orange);border-color:#aa795b;box-shadow:0 4px 14px #110a2038}
+  .tier-option:hover{border-color:var(--orange);background-color:#342631;box-shadow:0 8px 22px #0b081633}
+  .host-pumpkin:enabled:hover{border-color:var(--orange);background-color:#49313e;translate:0 -2px;filter:brightness(1.12)}
+  .pumpkin-stage:hover{border-color:#a17bb7;transition:border-color .25s}
+  .chance-details:hover{border-color:#a17bb7}.chance-details summary:hover{color:var(--orange);background-color:#32253b66}
+  .chance-details summary:hover .details-plus{color:var(--orange);scale:1.15}
+  input:hover,select:hover{border-color:#c38a60;background-color:#2a2034}
+  .rule-list>div:hover{translate:5px 0;background-color:#35263c55;border-radius:7px}.rule-list>div:hover h3,.main-rule:hover h3{color:var(--orange)}
+  .main-rule:hover,.little-note:hover{translate:0 -3px}.little-note:hover>svg{filter:brightness(1.12)}
+  .closing:hover>svg{transform:translateY(-5px) rotate(6deg) scale(1.05)}
+  .hero h1:hover,.section-heading h2:hover,.rules-title h2:hover{text-shadow:0 5px 22px #ff9a4b20}
+  .hero-description:hover,.rules-title>p:hover,.section-heading p:hover,.main-rule p:hover,.rule-list p:hover,.local-caption:hover,.site-footer>span:hover{color:var(--cream)}
+}
+@keyframes page-ripple{0%{transform:scale(.08);opacity:.85}100%{transform:scale(1.35);opacity:0}}
+@keyframes page-spark{0%{transform:translate(-50%,-50%) scale(.2) rotate(-15deg);opacity:0}25%{opacity:1}100%{transform:translate(-50%,-105%) scale(1.1) rotate(70deg);opacity:0}}
+@keyframes page-hover-spark{0%{transform:translateY(0) rotate(0);opacity:.8}100%{transform:translateY(-25px) rotate(70deg) scale(.25);opacity:0}}
+.calm .cursor-aura,.calm .tap-magic,.calm .hover-spark{display:none!important}
+.calm .is-pressed{scale:1!important}
+@media(prefers-reduced-motion:reduce){.rule-list>div:hover,.main-rule:hover,.little-note:hover{translate:none}.button:hover svg,.text-button:hover svg,.host-pumpkin:enabled:hover{translate:none}.cursor-aura,.tap-magic,.hover-spark{display:none!important}}
+
 
 
 
