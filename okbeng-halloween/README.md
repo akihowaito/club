@@ -13,3 +13,8 @@
 - 正式：`window.OKB_RUNTIME = { mode: 'live', api: 'https://你的后端域名' }` —— 后端需把本页来源 https://akihowaito.github.io 加入 OKB_CORS_ORIGINS。
 
 如果页面直接由后端服务托管（推荐，国内访问更稳），后端会自动下发正式配置，本目录只作备用。
+
+## 更新后手机上还是旧版？
+
+微信等 App 会把页面缓存很久。页面每次打开都会读 `version.json` 核对版本，旧了会自动刷新到新版；
+如果手机上缓存的是加入这个功能之前的旧页面，在链接后面加 `?v=任意数字` 打开一次即可（例：`…/okbeng-halloween/?v=1028`）。
