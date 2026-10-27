@@ -3,13 +3,13 @@
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
   const STORAGE_KEY = 'shunyu-halloween-v1';
-  const TIERS = {688: {target: 1, floor: 2888}, 1288: {target: 2, floor: 4688}};
+  const TIERS = {688: {target: 1, floor: 2888, lights: 35}, 1288: {target: 2, floor: 4688, lights: 70}};
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let state, busy = false, toastTimer, soundOn = false, audioContext, pendingConfirm;
   let hostSelection = [];
   let calm = reduceMotion.matches;
-  const pickRandom = (count) => {
-    const pool = Array.from({length: 35}, (_, i) => i + 1);
+  const pickRandom = (count, lights) => {
+    const pool = Array.from({length: lights}, (_, i) => i + 1);
     for (let i = pool.length - 1; i > 0; i--) {
       const values = new Uint32Array(1);
       crypto.getRandomValues(values);
@@ -18,13 +18,13 @@
     }
     return pool.slice(0, count);
   };
-  const createRound = (tier = 688, mode = 'demo', hidden = null, allowance = 5) => ({tier, mode, hidden: hidden || pickRandom(TIERS[tier].target), opened: [], allowance});
+  const createRound = (tier = 688, mode = 'demo', hidden = null, allowance = 5) => ({tier, mode, hidden: hidden || pickRandom(TIERS[tier].target, TIERS[tier].lights), opened: [], allowance});
   const found = () => state.opened.filter(n => state.hidden.includes(n)).length;
   const isComplete = () => found() >= TIERS[state.tier].target;
   const remaining = () => Math.max(0, state.allowance - state.opened.length);
   function validState(value) {
-    const validPositions = list => Array.isArray(list) && list.every(n => Number.isInteger(n) && n >= 1 && n <= 35) && new Set(list).size === list.length;
-    return value && Object.hasOwn(TIERS, value.tier) && ['demo', 'host'].includes(value.mode) && validPositions(value.hidden) && value.hidden.length === TIERS[value.tier].target && validPositions(value.opened) && Number.isInteger(value.allowance) && value.allowance >= value.opened.length && value.allowance <= 99999;
+    const validPositions = list => Array.isArray(list) && list.every(n => Number.isInteger(n) && n >= 1 && n <= TIERS[value.tier].lights) && new Set(list).size === list.length;
+    return value && Object.hasOwn(TIERS, value.tier) && ['demo', 'host'].includes(value.mode) && validPositions(value.hidden) && value.hidden.length === TIERS[value.tier].target && validPositions(value.opened) && Number.isSafeInteger(value.allowance) && value.allowance >= value.opened.length;
   }
   try { const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); state = validState(saved) ? saved : createRound(); } catch { state = createRound(); }
   function save() {
@@ -48,14 +48,16 @@
   $('#confirm-ok').addEventListener('click', () => { $('#confirm-dialog').close(); const action = pendingConfirm; pendingConfirm = null; action?.(); });
   $('#confirm-dialog').addEventListener('cancel', () => { pendingConfirm = null; });
   function render() {
-    const complete = isComplete();
+    const complete = isComplete(), lights = TIERS[state.tier].lights;
+    $('#hero-light-count').textContent = lights; $('#rule-light-count').textContent = lights;
+    $('#pumpkin-grid').setAttribute('aria-label', `${lights}盏南瓜灯`);
     $('#remaining-count').textContent = remaining(); $('#mobile-remaining').textContent = remaining();
     $('#found-count').textContent = `${found()} / ${TIERS[state.tier].target}`;
     $('#mode-label').textContent = state.mode === 'demo' ? '趣味体验' : '老板开局';
     $('#local-caption').textContent = state.mode === 'demo' ? `体验场 · 随机藏鬼 · 本轮 ${state.allowance} 次机会` : `当面开局 · 本轮 ${state.allowance} 次机会 · 进度保存在本机`;
     $('#new-demo').textContent = state.mode === 'demo' ? '再来一轮 ↻' : '重新开局 ↻';
     $('#stage-instruction').textContent = complete ? '捣蛋鬼已集齐！本轮可结单，恭喜接住今晚的好运。' : !remaining() ? '本轮机会已用完。看看次数计算，或让老板补充机会吧。' : `还藏着 ${TIERS[state.tier].target - found()} 只捣蛋鬼，下一盏，也许就是它。`;
-    $('#pumpkin-grid').innerHTML = Array.from({length: 35}, (_, i) => {
+    $('#pumpkin-grid').innerHTML = Array.from({length: lights}, (_, i) => {
       const n = i + 1, opened = state.opened.includes(n), ghost = opened && state.hidden.includes(n);
       return `<button type="button" class="pumpkin${opened ? ' opened' : ''}${ghost ? ' ghost-found' : ''}" data-pumpkin="${n}" aria-label="${n}号南瓜灯${opened ? ghost ? '，已找到捣蛋鬼' : '，已打开，里面是空的' : '，点击寻找'}"${opened || complete || !remaining() ? ' disabled' : ''}><span class="pumpkin-visual"><svg class="pumpkin-drawing" viewBox="0 0 140 112" aria-hidden="true"><use href="#i-pumpkin"/></svg>${ghost ? '<svg class="found-ghost" viewBox="0 0 100 112" aria-hidden="true"><use href="#i-ghost"/></svg>' : ''}</span><span class="pumpkin-number">${ghost ? '抓到啦' : opened ? '空空如也' : String(n).padStart(2, '0')}</span></button>`;
     }).join('');
@@ -85,7 +87,7 @@
       setTimeout(() => { if (state !== currentRound) return; busy = false; presentResult(isComplete() ? 'win' : 'found', n); }, calm ? 100 : 650);
     } else {
       toast(`${String(n).padStart(2, '0')} 号只有一缕南瓜香。${remaining() ? '再找找，它就在这里。' : '本轮机会用完啦。'}`);
-      if (!remaining()) { busy = true; setTimeout(() => { if (state !== currentRound) return; busy = false; presentResult('empty'); }, calm ? 100 : 850); }
+      if (!remaining()) { busy = true; setTimeout(() => { if (state !== currentRound) return; busy = false; if (!remaining()) presentResult('empty'); }, calm ? 100 : 850); }
     }
   });
   function presentResult(type, number) {
@@ -99,7 +101,7 @@
     if (type === 'win') burst(innerWidth / 2, innerHeight * .33, 110, true);
   }
   $('#copy-result').addEventListener('click', async () => {
-    const text = `顺宇电竞 · 万圣节南瓜寻鬼\n档位：${state.tier}，保底 ${TIERS[state.tier].floor}\n已找到：${found()} / ${TIERS[state.tier].target} 只捣蛋鬼\n已打开：${state.opened.length} / 35 盏灯\n剩余机会：${remaining()} 次\n状态：${isComplete() ? '已集齐，请老板确认结单' : '寻找中'}\n本地互动记录，实际结果请由老板确认。`;
+    const text = `顺宇电竞 · 万圣节南瓜寻鬼\n档位：${state.tier}，保底 ${TIERS[state.tier].floor}，5局接单\n已找到：${found()} / ${TIERS[state.tier].target} 只捣蛋鬼\n已打开：${state.opened.length} / ${TIERS[state.tier].lights} 盏灯\n剩余机会：${remaining()} 次\n状态：${isComplete() ? '已集齐，请老板确认结单' : '寻找中'}\n本地互动记录，实际结果请由老板确认。`;
     try {
       if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
       else { const area = document.createElement('textarea'); area.value = text; area.style.cssText = 'position:fixed;left:-9999px'; document.body.append(area); area.select(); const copied = document.execCommand('copy'); area.remove(); if (!copied) throw new Error('copy unavailable'); }
@@ -123,14 +125,15 @@
   $('#chance-form').addEventListener('input', updateCalculation);
   $('#chance-form').addEventListener('submit', event => {
     event.preventDefault(); const result = updateCalculation();
-    if (!result) { $('#chance-error').textContent = '请正确填写金额、红色物品个数和撤离局数。'; return; }
-    if (result.total < state.opened.length) { $('#chance-error').textContent = `本轮已使用 ${state.opened.length} 次，总次数不能低于已用次数。`; return; }
-    state.allowance = result.total; save(); render(); toast(`本轮总次数已设为 ${result.total}，还可寻找 ${remaining()} 次。`);
+    if (!result) { $('#chance-error').textContent = '请正确填写金额、红色物品个数和击杀人数。'; return; }
+    if (!result.total) { $('#chance-error').textContent = '本次没有可追加的机会，请填写成功撤离后的数据。'; return; }
+    if (!Number.isSafeInteger(state.allowance + result.total)) { $('#chance-error').textContent = '累计次数过大，请核对本次填写的数据。'; return; }
+    state.allowance += result.total; save(); render(); toast(`已追加 ${result.total} 次机会，还可寻找 ${remaining()} 次。`);
   });
   function hostTarget() { return TIERS[Number($('#host-tier').value)].target; }
   function renderHost() {
     $('#host-selection-count').textContent = `${hostSelection.length} / ${hostTarget()}`;
-    $('#host-grid').innerHTML = Array.from({length: 35}, (_, i) => { const n = i + 1, selected = hostSelection.includes(n); return `<button type="button" data-hide="${n}" class="host-pumpkin${selected ? ' selected' : ''}" aria-label="${selected ? '取消' : '选择'}${n}号藏鬼位置" aria-pressed="${selected}"><svg viewBox="0 0 140 112" aria-hidden="true"><use href="#i-pumpkin"/></svg><span>${String(n).padStart(2, '0')}</span></button>`; }).join('');
+    $('#host-grid').innerHTML = Array.from({length: TIERS[Number($('#host-tier').value)].lights}, (_, i) => { const n = i + 1, selected = hostSelection.includes(n); return `<button type="button" data-hide="${n}" class="host-pumpkin${selected ? ' selected' : ''}" aria-label="${selected ? '取消' : '选择'}${n}号藏鬼位置" aria-pressed="${selected}"><svg viewBox="0 0 140 112" aria-hidden="true"><use href="#i-pumpkin"/></svg><span>${String(n).padStart(2, '0')}</span></button>`; }).join('');
     $('#host-error').textContent = '';
   }
   function openHost(keepTier = false) {
@@ -139,7 +142,7 @@
   }
   $('#host-open').addEventListener('click', () => openHost());
   $('#host-tier').addEventListener('change', () => { hostSelection = []; renderHost(); });
-  $('#host-random').addEventListener('click', () => { hostSelection = pickRandom(hostTarget()); renderHost(); });
+  $('#host-random').addEventListener('click', () => { hostSelection = pickRandom(hostTarget(), TIERS[Number($('#host-tier').value)].lights); renderHost(); });
   $('#host-grid').addEventListener('click', event => {
     const button = event.target.closest('[data-hide]'); if (!button) return;
     const n = Number(button.dataset.hide);
@@ -158,10 +161,8 @@
   });
   function setMotion(value) {
     calm = !value; document.documentElement.classList.toggle('calm', calm);
-    $('#motion-toggle').setAttribute('aria-pressed', String(value)); $('#motion-toggle').setAttribute('aria-label', value ? '关闭环境动效' : '开启环境动效');
     if (calm) { particles = []; ctx.clearRect(0, 0, innerWidth, innerHeight); $('#hero-art').style.transform = ''; resetGhostDrag(); }
   }
-  $('#motion-toggle').addEventListener('click', () => { setMotion(calm); toast(calm ? '已切换安静夜游，环境动效关闭。' : '魔法回来了，环境动效开启。'); });
   reduceMotion.addEventListener('change', event => setMotion(!event.matches));
   $('#sound-toggle').addEventListener('click', async () => {
     try { if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)(); await audioContext.resume(); soundOn = !soundOn; $('#sound-toggle').classList.toggle('sound-off', !soundOn); $('#sound-toggle').setAttribute('aria-pressed', String(soundOn)); $('#sound-toggle').setAttribute('aria-label', soundOn ? '关闭音效' : '开启音效'); if (soundOn) chime('found'); toast(soundOn ? '音效开启，听听南瓜里的小秘密。' : '音效已关闭，安静地寻找吧。'); }
