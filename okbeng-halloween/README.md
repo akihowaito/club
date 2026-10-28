@@ -1,6 +1,10 @@
 # OK绷电竞 · 万圣扭蛋机
 
-线上地址：https://akihowaito.github.io/club/okbeng-halloween/
+正式地址：https://okbeng-halloween.akihowaito.cn/（后台 /admin.html）
+
+这里是 GitHub Pages 备用地址，已连接正式后台，和正式地址共用同一份数据。
+
+备用地址：https://akihowaito.github.io/club/okbeng-halloween/
 后台：https://akihowaito.github.io/club/okbeng-halloween/admin.html
 
 本目录是构建产物（代码已混淆并限定域名运行），源码不在此仓库。
