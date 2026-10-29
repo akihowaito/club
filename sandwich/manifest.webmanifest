@@ -1,0 +1,9 @@
+{
+  "name": "三明治电竞 Sandwich Club",
+  "short_name": "三明治电竞",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FCE1CF",
+  "theme_color": "#FCE1CF",
+  "icons": [{ "src": "./apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}
